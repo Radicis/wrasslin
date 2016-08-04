@@ -1,0 +1,16 @@
+<ion-view view-title="Events">
+  <ion-nav-buttons side="right">
+    <button class="button" ng-click="addEvent()">
+      Add New
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="event in events | orderBy: '-date'" type="item-text-wrap" href="#/tab/events/{{event.$id}}">
+        <h2>{{event.name}}</h2>
+        <p>{{event.date | date:dateFormat}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

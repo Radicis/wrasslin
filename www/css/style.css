@@ -1,0 +1,17 @@
+.center{
+  text-align:center;
+}
+
+.fullWidth {
+  width: 100%; /* Or whatever you'd like the width to be */
+}
+
+.fullWidth select {
+  left: 20px;
+}
+
+.isWinner{
+  font-weight:bold;
+  color:green;
+  font-size:1.5em;
+}

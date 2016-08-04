@@ -1,0 +1,38 @@
+<ion-view view-title="Wrasslin">
+  <ion-nav-buttons side="right">
+    <button ng-if="!loggedIn" class="button" ng-click="login()">
+      Log In
+    </button>
+    <button ng-if="loggedIn" class="button" ng-click="logout()">
+     Log Out
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+    <ion-list>
+      <ion-item ng-repeat="event in events | orderBy: '-date'" type="item-text-wrap" ng-init="matches = getMatches(event)">
+        <h2>{{event.name}}</h2>
+        <p>{{event.date | date:dateFormat}}</p>
+        <div class="padding" ng-init="users = getPoints(event)">
+          <p>Username: {{userPoints.username}} - {{username.points}} points</p>
+        </div>
+          <div class="card padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap">
+              <h1 class="title">
+                <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h1>
+            <button ng-if=match.active class="button button-positive" ng-click="setWinner(match, event)">Match Over</button>
+            <ion-list>
+              <ion-item ng-repeat="vote in match.votes"><strong>{{vote.name}}</strong> voted for <strong>{{vote.vote}}</strong></ion-item>
+            </ion-list>
+            <div ng-if="match.active && loggedIn">
+              <button class="button button-block button-positive" ng-click="vote(match.$id, match.p1)">
+                {{match.p1}}
+              </button>
+              VS
+              <button class="button button-block button-positive" ng-click="vote(match.$id, match.p2)">
+                {{match.p2}}
+              </button>
+            </div>
+          </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

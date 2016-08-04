@@ -1,0 +1,11 @@
+<ion-view view-title="{{event.name}}">
+  <ion-content class="padding">
+    <h2>{{event.name}}</h2>
+    <p>Date: {{event.date | date:dateFormat}}</p>
+    <form name="createEventForm" novalidate="" ng-submit="createEvent(createEventForm)">
+      <button class="button button-block button-positive" type="submit">
+        Save
+      </button>
+    </form>
+  </ion-content>
+</ion-view>

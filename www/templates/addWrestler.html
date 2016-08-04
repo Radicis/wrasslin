@@ -1,0 +1,22 @@
+<div class="bar bar-header bar-positive">
+  <h1 class="title">Enter Wrestler Details</h1>
+</div>
+
+<div class="list">
+  <label class="item item-input">
+    <input type="text" ng-model="newWrestler.name" placeholder="Name">
+  </label>
+</div>
+<ul class="list">
+
+  <li class="item item-toggle">
+    Team (Y/N)
+    <label class="toggle toggle-assertive">
+      <input type="checkbox" ng-model="newWrestler.isTeam" ng-init="newWrestler.isTeam=false">
+      <div class="track">
+        <div class="handle"></div>
+      </div>
+    </label>
+  </li>
+</ul>
+</div>

@@ -1,0 +1,11 @@
+.center{
+  text-align:center;
+}
+
+.fullWidth {
+  width: 100%; /* Or whatever you'd like the width to be */
+}
+
+.fullWidth select {
+  left: 20px;
+}

@@ -1,0 +1,53 @@
+<div class="bar bar-header bar-positive">
+  <h1 class="title">Enter Match Details</h1>
+</div>
+<label class="item item-input item-select">
+  <div class="input-label">
+    Type
+  </div>
+  <select ng-options="option for option in matchTypes"
+          ng-model="selectedMatchtype"
+          ng-change="matchTypeChanged(selectedMatchtype)">
+  </select>
+</label>
+<div class="padding"></div>
+
+<div class="list" ng-show="selectedMatchtype == matchTypes[0]">
+  <label class="item item-input item-select">
+    <div class="input-label">
+      &nbsp;
+    </div>
+    <select ng-options="item as item.name for item in wrestlers"
+            ng-model="newMatch.p1">
+    </select>
+  </label>
+  <p class="center padding">Vs</p>
+  <label class="item item-input item-select">
+    <div class="input-label">
+      &nbsp;
+    </div>
+    <select ng-options="item as item.name for item in wrestlers"
+            ng-model="newMatch.p2">
+    </select>
+  </label>
+</div>
+
+<div class="list" ng-show="selectedMatchtype == matchTypes[1]">
+  <label class="item item-input item-select">
+    <div class="input-label">
+      &nbsp;
+    </div>
+    <select>
+      <option ng-repeat="team in tag-teams">{{team.name}}</option>
+    </select>
+  </label>
+  <p class="center padding">Vs</p>
+  <label class="item item-input item-select">
+    <div class="input-label">
+      &nbsp;
+    </div>
+    <select>
+      <option ng-repeat="team in tag-teams">{{team.name}}</option>
+    </select>
+  </label>
+</div>
