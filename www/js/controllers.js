@@ -2,6 +2,8 @@ angular.module('starter.controllers', [])
 
   .controller("AuthCtrl", function($scope, Auth, $ionicPopup){
 
+    var provider = new firebase.auth.GoogleAuthProvider();
+
     // Initialize Firebase
     var config = {
       apiKey: "AIzaSyCkeZQPg-wYtS08LQDqFKyDN4_aCvu6nkY",
@@ -15,6 +17,28 @@ angular.module('starter.controllers', [])
       if (user) {
         console.log("Signed in with: " + user.uid);
         $scope.loggedIn = true;
+        user.providerData.forEach(function (profile) {
+          var userRef = firebase.database().ref('userInfo');
+
+          var foo = userRef.child("uid").equalTo(user.uid);
+
+          // if($firebaseArray(userRef.child("uid").equalTo(user.uid)).length>0){
+          //     console.log("Already in db");
+          // }
+          // console.log("Sign-in provider: "+profile.providerId);
+          // console.log("  Provider-specific UID: "+profile.uid);
+          // console.log("  Name: "+profile.displayName);
+          // console.log("  Email: "+profile.email);
+          // console.log("  Photo URL: "+profile.photoURL);
+          var newUser = {
+            uid: user.uid,
+            name: profile.displayName,
+            photo: profile.photoURL
+          };
+          console.log(newUser);
+          userRef.push(newUser);
+        });
+
         $location.path("/dash");
       } else {
         console.log("Not Signed in ");
@@ -24,31 +48,51 @@ angular.module('starter.controllers', [])
     });
 
     $scope.login = function() {
-      $scope.user = {};
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        console.log("Signed in?");
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        console.log("Error signing in");
+      });
 
-      var myPopup = $ionicPopup.show({
-        templateUrl: 'templates/signup.html',
-        title: 'Enter Account Details',
-        scope: $scope,
-        buttons: [
-          { text: 'Cancel' },
-          {
-            text: '<b>Login</b>',
-            type: 'button-positive',
-            onTap: function(e) {
-              if (!$scope.user.email || !$scope.user.password) {
-                e.preventDefault();
-              } else {
-                console.log("doing login");
-                myPopup.close();
-              }
-            }
-          }
-        ]
-      });
-      myPopup.then(function() {
-        Auth.login($scope.user.email, $scope.user.password);
-      });
+
+
+      // $scope.user = {};
+      //
+      // var myPopup = $ionicPopup.show({
+      //   templateUrl: 'templates/signup.html',
+      //   title: 'Enter Account Details',
+      //   scope: $scope,
+      //   buttons: [
+      //     { text: 'Cancel' },
+      //     {
+      //       text: '<b>Login</b>',
+      //       type: 'button-positive',
+      //       onTap: function(e) {
+      //         if (!$scope.user.email || !$scope.user.password) {
+      //           e.preventDefault();
+      //         } else {
+      //           console.log("doing login");
+      //           myPopup.close();
+      //         }
+      //       }
+      //     }
+      //   ]
+      //});
+      // myPopup.then(function() {
+      //   Auth.login($scope.user.email, $scope.user.password);
+      // });
 
     };
 
@@ -100,13 +144,16 @@ angular.module('starter.controllers', [])
     $scope.getPoints = function(event){
       var eventRef = firebase.database().ref().child("events").child(event.$id);
       var points = $firebaseArray(eventRef.child("points"));
-      var userRef = firebase.database().ref().child("users");
+      var userRef = firebase.database().ref('userInfo');
+      console.log($firebaseArray(userRef));
       points.$loaded().then(function(x) {
         angular.forEach(points, function(key, val){
-          console.log("uid: " + key.uid + " points: " + key.points);
           var user = $firebaseObject(userRef.child(key.uid));
+
+          // Required additional user info in DB
           console.log(user);
-          $scope.userPoints.push({username: user.email, points: 10});
+          console.log(user.name);
+          $scope.userPoints.push({name: user.name, points: key.points});
         })
       });
     };
@@ -125,7 +172,7 @@ angular.module('starter.controllers', [])
           return false;
         }
         else{
-          votes.push({uid: uid, name: firebase.auth().currentUser.email, vote: wrestler});
+          votes.push({uid: uid, vote: wrestler});
           matchRef.update({ votes: votes});
         }
       });

@@ -26,6 +26,7 @@ angular.module('starter.services', [])
           console.log("Sign in: " + error);
           return false;
         });
+
       return true;
     };
 

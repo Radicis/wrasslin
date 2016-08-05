@@ -13,7 +13,7 @@
         <h2>{{event.name}}</h2>
         <p>{{event.date | date:dateFormat}}</p>
         <div class="padding" ng-init="users = getPoints(event)">
-          <p>Username: {{userPoints.username}} - {{username.points}} points</p>
+          <p ng-repeat="points in userPoints">Username: {{points.name}} : {{points.points}} points</p>
         </div>
           <div class="card padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap">
               <h1 class="title">
