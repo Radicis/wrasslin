@@ -22,15 +22,17 @@
               <h2 class="title padding">
                 <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
             <button ng-if=match.active class="button button-positive" ng-click="setWinner(match, event)">Match Over</button>
-            <ion-list>
-              <ion-item ng-repeat="vote in match.votes"><strong>{{vote.name}}</strong> voted for <strong>{{vote.vote}}</strong></ion-item>
-            </ion-list>
-            <div ng-if="match.active && loggedIn">
-              <button class="button button-block button-positive" ng-click="vote(match.$id, match.p1)">
+            <div class="row">
+              <div  ng-repeat="vote in match.votes" class="col">
+                <strong>{{vote.name}}</strong> voted for <strong>{{vote.vote}}</strong>
+              </div>
+            </div>
+            <div ng-if="match.active && loggedIn && !hasUserVoted(match)">
+              <button class="button button-block button-positive" ng-click="vote(event.$id, match.$id, match.p1)">
                 {{match.p1}}
               </button>
               VS
-              <button class="button button-block button-positive" ng-click="vote(match.$id, match.p2)">
+              <button class="button button-block button-positive" ng-click="vote(event.$id, match.$id, match.p2)">
                 {{match.p2}}
               </button>
             </div>

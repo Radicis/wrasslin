@@ -1,4 +1,4 @@
-angular.module('starter').controller('DashCtrl', function($scope, Events, UserInfo, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
+angular.module('starter').controller('DashCtrl', function($scope, Events, Matches, Votes, UserInfo, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
 
     var ref = firebase.database().ref();
     $scope.userPoints = [];
@@ -6,55 +6,75 @@ angular.module('starter').controller('DashCtrl', function($scope, Events, UserIn
     $scope.events = Events.getActive();
 
     $scope.getMatches = function(event){
-      event.matches = $firebaseArray(ref.child('matches').orderByChild("eventId").equalTo(event.$id));
+      var matches = $firebaseArray(ref.child('matches').orderByChild("eventId").equalTo(event.$id));
+      var votes = [];
+      matches.$loaded().then(function(){
+        angular.forEach(matches, function(key){
+          $scope.getVotes(key);
+        });
+        event.matches = matches;
+      });
       $scope.getPoints(event);
+    };
+
+    $scope.getVotes = function(match){
+     var votes = $firebaseArray(ref.child('votes').orderByChild("matchId").equalTo(match.$id));
+     votes.$loaded().then(function(){
+        match.votes = votes;
+     })
     };
 
     $scope.getPoints = function(event){
       event.userPoints = [];
-      var eventRef = ref.child("events").child(event.$id);
-      var points = $firebaseArray(eventRef.child("points"));
-      points.$loaded().then(function(x) {
-        angular.forEach(points, function(key, val){
+      Votes.getByEvent(event.$id).then(function(x) {
+        angular.forEach(x, function(key){
+          var points = 0;
+          angular.forEach(event.userPoints, function(key){
+            //if(key.uid===????)
+          });
+          // loop to increment points for each point???
             UserInfo.get(key.uid).then(function(info){
-                console.log(info[0]);
-                console.log("name: " + info[0].name);
-                event.userPoints.push({name: info[0].name, points: key.points});
+                event.userPoints.push({uid: info[0].uid, name: info[0].name, points: points});
             });
         });
       });
     };
 
-    $scope.vote = function(matchId, wrestler){
+    $scope.vote = function(eventId, matchId, wrestler){
       var uid = firebase.auth().currentUser.uid;
-      var matchRef = firebase.database().ref().child("matches").child(matchId);
-      var votes = matchRef.child('votes');
-      var currentVotesRef = votes.orderByChild('uid').equalTo(uid);
-      var currentVotes = $firebaseArray(currentVotesRef);
-      currentVotes.$loaded().then(function(x) {
-        if(currentVotes.length>0){
-          console.log("Duplicate");
-          return false;
-        }
-        else{
-          votes.push({uid: uid, vote: wrestler});
-        }
+      UserInfo.get(uid).then(function(info){
+        var username = info[0].name;
+        Votes.getByMatch(matchId).then(function(x) {
+           if(Votes.hasUserVoted(uid, x)){
+            console.log("Duplicate vote!");
+            return false;
+          }
+          else{
+            console.log("Saving vote!");
+            firebase.database().ref('votes/').push({
+              uid: uid,
+              name: username,
+              vote: wrestler,
+              date: new Date().toISOString(),
+              matchId: matchId,
+              eventId: eventId
+            });
+            return true;
+          }
+        });
       });
     };
 
-    $scope.hasVoted = function(matchId){
+    $scope.hasUserVoted = function(match){
         var uid = firebase.auth().currentUser.uid;
-        var matchRef = firebase.database().ref().child("matches").child(matchId);
-        var votes = matchRef.child('votes');
-        var currentVotesRef = votes.orderByChild('uid').equalTo(uid);
-        var currentVotes = $firebaseArray(currentVotesRef);
-        currentVotes.$loaded().then(function(x) {
-          if(currentVotes.length>0){
-            return false;
+        var voted = false;
+        angular.forEach(match.votes, function(key){
+          if(key.uid===uid){
+            voted = true;
           }
-          return true;
         });
-    }
+      return voted;
+    };
 
     $scope.setWinner = function(match, event){
       $scope.match = match;
@@ -83,30 +103,24 @@ angular.module('starter').controller('DashCtrl', function($scope, Events, UserIn
         console.log("Match won by:" + $scope.winner.name);
         var matchRef = firebase.database().ref().child("matches").child(match.$id);
         matchRef.update({winner: $scope.winner.name, active: false});
-        $scope.assignPoints(match, event);
+        // $scope.assignPoints(match, event);
       });
     };
 
-    $scope.assignPoints = function(match, event){
-      var eventRef = firebase.database().ref().child("events").child(event.$id);
-      var votes = match.votes;
-      var winningVotes = [];
-      angular.forEach(votes, function(key, val){
-        if(key.vote==match.winner){
-          winningVotes.push(key.uid);
-        }
-      });
-
-      var currentPoints = $firebaseArray(eventRef.child("points"));
-      var newPoints = [];
-
-        for(var i=0; i<winningVotes.length;i++) {
-          eventRef.child('points').push({
-            uid: winningVotes[i],
-            points: 1
-          });
-        }
-    }
+    // $scope.assignPoints = function(match, event){
+    //   var votes = match.votes;
+    //   angular.forEach(votes, function(key){
+    //     console.log(key.vote);
+    //     if(key.vote==match.winner){
+    //       firebase.database().ref().child("points/").push({
+    //         uid: uid,
+    //         matchId: match.$id,
+    //         eventId: event.$id,
+    //         points: 1
+    //       });
+    //     }
+    //   });
+    // };
 
     /*
        * if given group is the selected group, deselect it
