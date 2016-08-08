@@ -7,17 +7,20 @@
      Log Out
     </button>
   </ion-nav-buttons>
-  <ion-content class="padding">
+  <ion-content>
     <ion-list>
-      <ion-item ng-repeat="event in events | orderBy: '-date'" type="item-text-wrap" ng-init="matches = getMatches(event)">
+    <div ng-repeat="event in events | orderBy: '-date'" ng-init="getMatches(event)">
+      <ion-item class="item-stable"
+      ng-click="toggleGroup(event)"
+      ng-class="{active: isGroupShown(event)}" type="item-text-wrap" >
         <h2>{{event.name}}</h2>
         <p>{{event.date | date:dateFormat}}</p>
-        <div class="padding" ng-init="users = getPoints(event)">
-          <p ng-repeat="points in userPoints">Username: {{points.name}} : {{points.points}} points</p>
+        <div class="padding">
+          <p ng-repeat="points in event.userPoints | orderBy: 'points.points'">{{points.name}} : {{points.points}} points</p>
         </div>
-          <div class="card padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap">
-              <h1 class="title">
-                <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h1>
+          <ion-item class="item-accordion padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" ng-show="isGroupShown(event)">
+              <h2 class="title padding">
+                <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
             <button ng-if=match.active class="button button-positive" ng-click="setWinner(match, event)">Match Over</button>
             <ion-list>
               <ion-item ng-repeat="vote in match.votes"><strong>{{vote.name}}</strong> voted for <strong>{{vote.vote}}</strong></ion-item>
@@ -31,8 +34,9 @@
                 {{match.p2}}
               </button>
             </div>
-          </div>
+        </ion-item>
       </ion-item>
-    </ion-list>
+  </div>
+  </ion-list>
   </ion-content>
 </ion-view>

@@ -60,6 +60,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
     .state('tab.events', {
       url: '/events',
+    //   resolve: {
+    //       Events: 'Events',
+    //       events: function($firebaseArray, Events) {
+    //         // load the view, when the data is available
+    //         // this is where $loaded() belongs
+    //         return $firebaseArray(Events.getall()).$loaded();
+    //       }
+    //     }
       views: {
         'tab-events': {
           templateUrl: 'templates/tab-events.html',
