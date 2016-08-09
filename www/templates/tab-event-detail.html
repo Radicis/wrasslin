@@ -25,11 +25,11 @@
                 </ion-item>
               </ion-list>
               <div ng-if="match.active && isAuthorised() && !hasUserVoted(match)">
-                <button class="button button-block button-positive" ng-click="vote(event.$id, match.$id, match.p1)">
+                <button class="button button-block button-positive" ng-click="vote(event, match, match.p1)">
                   {{match.p1}}
                 </button>
                 VS
-                <button class="button button-block button-positive" ng-click="vote(event.$id, match.$id, match.p2)">
+                <button class="button button-block button-positive" ng-click="vote(event, match, match.p2)">
                   {{match.p2}}
                 </button>
               </div>

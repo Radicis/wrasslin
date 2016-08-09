@@ -25,6 +25,17 @@ angular.module('starter').service('Matches', function($q, $firebaseArray, $fireb
       return def.promise;
   };
 
+  this.hasuserVoted = function(match, uid){
+      var voted = false;
+      match.votes.forEach(function(vote){
+        if(vote.uid==uid){
+         console.log("its true");
+          voted =  true;
+        }
+      });
+      return voted;
+  }
+
   this.getByEvent = function(eventId){
       var def = $q.defer();
       var eventMatches = $firebaseArray(matchesRef.orderByChild("eventId").equalTo(eventId));

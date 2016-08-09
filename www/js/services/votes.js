@@ -25,13 +25,15 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
     return def.promise;
   };
 
-  this.hasUserVoted = function(uid, votes){
+  this.hasUserVoted = function(votes, uid){
     var dupe = false;
-    angular.forEach(votes, function(key){
-      if(key.uid===uid){
-        dupe = true;
-      }
-    });
+    if(votes){
+        votes.forEach(function(vote){
+          if(vote.uid==uid){
+            dupe = true;
+          }
+        });
+    }
     return dupe;
   }
 });

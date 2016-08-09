@@ -8,31 +8,33 @@
     </button>
   </ion-nav-buttons>
   <ion-content>
+      <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
     <ion-list>
-    <div ng-repeat="event in events | orderBy: '-date'" ng-init="getMatches(event)">
+    <div ng-repeat="event in events | orderBy: '-date'" ng-init="getEventInfo(event)">
       <ion-item type="item-text-wrap">
         <h2 class="header">{{event.name}}</h2>
         <span>{{event.location}} : {{event.date | date:dateFormat}}</span>
         <ion-list>
           <div class="col" ng-repeat="points in event.userPoints | orderBy: 'points.points'">{{points.name}} : {{points.points}} points</div>
         </ion-list>
-          <ion-item class="item-stable lessPadding"
+          <ion-item class="item-stable lessPadding center"
           ng-click="toggleGroup(match)"
           ng-class="{active: isGroupShown(event)}" class="padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
               <h2 class="title padding center">
                 <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
-            <button ng-if=match.active class="button button-positive" ng-click="setWinner(match, event)">Match Over</button>
+            <button ng-if=match.active class="button button-positive" ng-click="setWinner(match, event)">Set Winner</button>
+            <h2>Votes: {{match.votes.length}}</h2>
             <ion-list>
               <ion-item ng-repeat="vote in match.votes" class="item-accordion center" ng-show="isGroupShown(match)">
                   <div class="item item-avatar" ><img src="{{vote.img}}"><p><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p></div>
               </ion-item>
             </ion-list>
             <div ng-if="match.active && isAuthorised() && !hasUserVoted(match)">
-              <button class="button button-block button-positive" ng-click="vote(event.$id, match.$id, match.p1)">
+              <button class="button button-block button-positive" ng-click="vote(event, match, match.p1)">
                 {{match.p1}}
               </button>
               VS
-              <button class="button button-block button-positive" ng-click="vote(event.$id, match.$id, match.p2)">
+              <button class="button button-block button-positive" ng-click="vote(event, match, match.p2)">
                 {{match.p2}}
               </button>
             </div>

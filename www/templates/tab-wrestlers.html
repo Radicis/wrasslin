@@ -6,11 +6,10 @@
     </ion-nav-buttons>
   <ion-content>
     <ion-list>
-        <ion-item class="item-button-right" ng-repeat="wrestler in wrestlers | orderBy: 'name'">{{wrestler.name}}
-            <button class="button" ng-click="delete(wrestler)">
-                <i class="icon ion-android-close"></i>
-            </button>
-   </ion-item>
+        <ion-item class="item-icon-left" on-hold="delete(wrestler)" ng-repeat="wrestler in wrestlers | orderBy: 'name'">
+            <i ng-if="!wrestler.isTeam" class="icon ion-ios-person"></i>
+            <i ng-if="wrestler.isTeam" class="icon ion-ios-people"></i>
+            {{wrestler.name}} </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>

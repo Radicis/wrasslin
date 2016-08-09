@@ -1,4 +1,4 @@
-angular.module('starter').service("Auth", function($q, $firebaseAuth, $firebaseArray){
+angular.module('starter').service("Auth", function($q, $firebaseAuth, $firebaseArray, $firebaseObject){
 
  var provider = new firebase.auth.GoogleAuthProvider();
 
@@ -14,16 +14,16 @@ angular.module('starter').service("Auth", function($q, $firebaseAuth, $firebaseA
 
   this.get = function(uid){
       var def = $q.defer();
-      var userRef = firebase.database().ref().child("userInfo");
-      var userInfoRef = userRef.orderByChild("uid").equalTo(uid);
-      $firebaseArray(userInfoRef).$loaded().then(function(snap){
-          def.resolve(snap);
+      var userInfoRef = firebase.database().ref().child("userInfo").orderByChild("uid").equalTo(uid);
+      var userInfo = $firebaseArray(userInfoRef);
+      userInfo.$loaded().then(function(snap){
+        def.resolve(snap);
       });
       return def.promise;
   };
 
   this.setUserInfo = function(uid, profile){
-      firebase.database().ref('userInfo/').push({
+      firebase.database().ref('userInfo').child(uid).set({
               uid: uid,
               name: profile.displayName,
               email: profile.email,

@@ -1,4 +1,4 @@
-angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPopup){
+angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPopup, $ionicPopover){
 
   var provider = new firebase.auth.GoogleAuthProvider();
 
@@ -24,9 +24,9 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
       console.log("Signed in with: " + user.uid);
       Auth.authorise(true);
       user.providerData.forEach(function (profile) {
-          UserInfo.setUserInfo(user.uid, profile);
+          Auth.setUserInfo(user.uid, profile);
       });
-      $route.reload();
+      //$route.reload();
     } else {
       console.log("Not Signed in.");
       Auth.authorise(false);
@@ -65,4 +65,31 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
   $scope.logout = function(){
     Auth.signOut();
   };
+
+  $scope.doPopover = function(templateUrl, $event){
+      $ionicPopover.fromTemplateUrl("templates/popovers/" + templateUrl + ".html", {
+          scope: $scope
+       }).then(function(popover) {
+          $scope.popover = popover;
+          $scope.openPopover($event);
+       });
+   }
+
+   $scope.openPopover = function($event) {
+      $scope.popover.show($event);
+   };
+
+   $scope.closePopover = function() {
+      $scope.popover.hide();
+   };
+
+   //Cleanup the popover when we're done with it!
+   $scope.$on('$destroy', function() {
+      $scope.popover.remove();
+   });
+
+   // Execute action on hide popover
+   $scope.$on('popover.hidden', function() {
+      // Execute action
+   });
 })

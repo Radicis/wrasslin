@@ -29,15 +29,15 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
 
   this.getPoints = function(event){
     userPoints = [];
-    Votes.getByEvent(event.$id).then(function(x) {
-      angular.forEach(x, function(key){
+    Votes.getByEvent(event.$id).then(function(votes) {
+      angular.forEach(votes, function(vote){
         var points = 0;
-        angular.forEach(event.userPoints, function(key){
+        angular.forEach(event.userPoints, function(vote){
           //if(key.uid===????)
         });
         // loop to increment points for each point???
-          Auth.get(key.uid).then(function(info){
-              event.userPoints.push({uid: info[0].uid, name: info[0].name, points: points});
+          Auth.get(vote.uid).then(function(info){
+              event.userPoints.push({uid: vote.uid, name: info[0].name, points: points});
           });
       });
     });

@@ -3,7 +3,27 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
     $scope.wrestlers = Wrestlers.getAll();
 
     $scope.delete = function(wrestler){
-        Wrestlers.delete(wrestler);
+        $scope.check = {};
+        var myPopup = $ionicPopup.show({
+          templateUrl: 'templates/confirmDelete.html',
+          title: 'Enter Name',
+          scope: $scope,
+          buttons: [
+            { text: 'Cancel' },
+            {
+              text: '<b>Delete</b>',
+              type: 'button-positive',
+              onTap: function(e) {
+                console.log($scope.check.confirmDelete);
+                if ($scope.check.confirmDelete==true) {
+                  Wrestlers.delete(wrestler);
+                } else {
+                  myPopup.close();
+                }
+              }
+            }
+          ]
+        });
     }
 
     $scope.addWrestler = function(){
