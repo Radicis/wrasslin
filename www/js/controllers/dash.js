@@ -1,4 +1,4 @@
-angular.module('starter').controller('DashCtrl', function($scope, $window, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
+angular.module('starter').controller('DashCtrl', function($scope, $window, Points, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
 
     var ref = firebase.database().ref();
     $scope.userPoints = [];
@@ -19,7 +19,20 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, Event
                });
           });
       });
-      event.userPoints = Events.getPoints(event);
+      Points.getByEvent(event).then(function(points){
+          event.userPoints = [];
+          // create array here
+          points.forEach(function(point){
+              // total up all poitns and associate with user
+              event.userPoints.forEach(function(userPoint){
+                //   if(userPoint.uid==point.uid){
+                //       userPoint.points = userPoint.points + 1;
+                //   }
+              });
+
+          })
+          event.userPoints = points;
+      });
     };
 
     $scope.vote = function(event, match, wrestler){
@@ -80,9 +93,25 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, Event
         console.log("Match won by:" + $scope.winner.name);
         var matchRef = firebase.database().ref().child("matches").child(match.$id);
         matchRef.update({winner: $scope.winner.name, active: false});
+        $scope.assignPoints(match, event, $scope.winner.name);
         $scope.doRefresh();
       });
     };
+
+    $scope.assignPoints = function(match, event, winner){
+        Votes.getByMatch(match.$id).then(function(matchVotes) {
+            matchVotes.forEach(function(vote){
+                if(vote.vote==winner){
+                    firebase.database().ref('points').push({
+                        uid: vote.uid,
+                        eventId: event.$id,
+                        matchId: match.$id,
+                        points: 1
+                    });
+                }
+            });
+    });
+}
     /*
        * if given group is the selected group, deselect it
        * else, select the given group

@@ -33,11 +33,12 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
       angular.forEach(votes, function(vote){
         var points = 0;
         angular.forEach(event.userPoints, function(vote){
-          //if(key.uid===????)
+          if(key.uid==vote.uid){
+              points++
+          }
         });
-        // loop to increment points for each point???
-          Auth.get(vote.uid).then(function(info){
-              event.userPoints.push({uid: vote.uid, name: info[0].name, points: points});
+          Auth.get(vote.uid).then(function(userInfo){
+              event.userPoints.push({uid: vote.uid, name: userInfo[0].name, points: points});
           });
       });
     });

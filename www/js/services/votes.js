@@ -18,8 +18,8 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
 
   this.getByEvent = function(eventId){
     var def = $q.defer();
-    var eventPoints = $firebaseArray(votesRef.orderByChild("eventId").equalTo(eventId));
-    eventPoints.$loaded().then(function(snap){
+    var eventVotes = $firebaseArray(votesRef.orderByChild("eventId").equalTo(eventId));
+    eventVotes.$loaded().then(function(snap){
       def.resolve(snap);
     });
     return def.promise;
