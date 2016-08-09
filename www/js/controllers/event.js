@@ -43,8 +43,7 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,  $ionic
       $scope.selectedMatchtype = matchType;
     };
 
-
-    var createMatch = function (eventId, type, p1, p2) {    
+    var createMatch = function (eventId, type, p1, p2) {
       firebase.database().ref('matches/').push({
         eventId: eventId,
         type: type,

@@ -1,17 +1,44 @@
 <ion-view view-title="{{event.name}}">
-  <ion-content class="padding">
-    <h2>{{event.name}}</h2>
-    <p class="padding">Date: {{event.date | date:dateFormat}}</p>
-    <ul class="list">
-      <li class="item" ng-repeat="match in eventMatches">
-        <p>{{match.type}}</p>
-        <strong>{{match.p1}}</strong> Vs <strong>{{match.p2}}</strong>
-      </li>
-    </ul>
-    <div ng-if="event.active">
-      <button class="button button-full button-positive" ng-click="addMatch()">
+    <ion-nav-buttons side="right">
+      <button ng-if="isAuthorised()" class="button" ng-click="addMatch()">
         Add Match
       </button>
+    </ion-nav-buttons>
+  <ion-content class="padding">
+      <ion-list>
+      <div ng-repeat="event in events | orderBy: '-date'" ng-init="getMatches(event)">
+        <ion-item type="item-text-wrap">
+          <h2 class="header">{{event.name}}</h2>
+          <span>{{event.location}} : {{event.date | date:dateFormat}}</span>
+          <ion-list>
+            <div class="col" ng-repeat="points in event.userPoints | orderBy: 'points.points'">{{points.name}} : {{points.points}} points</div>
+          </ion-list>
+            <ion-item class="item-stable lessPadding"
+            ng-click="toggleGroup(match)"
+            ng-class="{active: isGroupShown(event)}" class="padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
+                <h2 class="title padding center">
+                  <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
+              <button ng-if=match.active class="button button-positive" ng-click="setWinner(match, event)">Match Over</button>
+              <ion-list>
+                <ion-item ng-repeat="vote in match.votes" class="item-accordion center" ng-show="isGroupShown(match)">
+                    <div class="item item-avatar" ><img src="{{vote.img}}"><p><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p></div>
+                </ion-item>
+              </ion-list>
+              <div ng-if="match.active && isAuthorised() && !hasUserVoted(match)">
+                <button class="button button-block button-positive" ng-click="vote(event.$id, match.$id, match.p1)">
+                  {{match.p1}}
+                </button>
+                VS
+                <button class="button button-block button-positive" ng-click="vote(event.$id, match.$id, match.p2)">
+                  {{match.p2}}
+                </button>
+              </div>
+          </ion-item>
+        </ion-item>
     </div>
+    </ion-list>
+    </ion-content>
+
+
   </ion-content>
 </ion-view>

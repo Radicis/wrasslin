@@ -11,52 +11,28 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
   };
   firebase.initializeApp(config);
 
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      console.log("Signed in with: " + user.uid);
-      $scope.loggedIn = true;
-      user.providerData.forEach(function (profile) {
-        var userRef = firebase.database().ref('userInfo');
-
-        var existingUser = userRef.child("uid").equalTo(user.uid);
-
-        // if($firebaseArray(existingUser).length>0){
-        //     console.log("Already in db");
-        // }
-        // else{
-        //     console.log("not in db");
-        // }
-
-        // if($firebaseArray(userRef.child("uid").equalTo(user.uid)).length>0){
-        //     console.log("Already in db");
-        // }
-        // console.log("Sign-in provider: "+profile.providerId);
-        // console.log("  Provider-specific UID: "+profile.uid);
-        // console.log("  Name: "+profile.displayName);
-        // console.log("  Email: "+profile.email);
-        // console.log("  Photo URL: "+profile.photoURL);
-
-
-      //   var newUser = {
-      //     uid: user.uid,
-      //     name: profile.displayName,
-      //     photo: profile.photoURL
-      //   };
-      //   console.log(newUser);
-      //   userRef.push(newUser);
-      });
-
-      $state.reload();
-    } else {
-      console.log("Not Signed in ");
-      $scope.loggedIn = false;
-      $state.reload();
-    }
-  });
+  $scope.isAuthorised = function(){
+      return Auth.isAuthorised();
+  }
 
   $scope.login = function() {
     Auth.login();
   };
+
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      console.log("Signed in with: " + user.uid);
+      Auth.authorise(true);
+      user.providerData.forEach(function (profile) {
+          UserInfo.setUserInfo(user.uid, profile);
+      });
+      $route.reload();
+    } else {
+      console.log("Not Signed in.");
+      Auth.authorise(false);
+      $route.reload();
+    }
+  });
 
   $scope.createUser = function() {
 

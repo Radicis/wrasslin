@@ -1,0 +1,16 @@
+<ion-view view-title="Wrestlers">
+    <ion-nav-buttons side="right">
+      <button ng-if="isAuthorised()" class="button" ng-click="addWrestler()">
+        Add Wreslter
+      </button>
+    </ion-nav-buttons>
+  <ion-content>
+    <ion-list>
+        <ion-item class="item-button-right" ng-repeat="wrestler in wrestlers | orderBy: 'name'">{{wrestler.name}}
+            <button class="button" ng-click="delete(wrestler)">
+                <i class="icon ion-android-close"></i>
+            </button>
+   </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

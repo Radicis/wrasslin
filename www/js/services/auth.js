@@ -1,11 +1,35 @@
-angular.module('starter').service("Auth", function($firebaseAuth){
+angular.module('starter').service("Auth", function($q, $firebaseAuth, $firebaseArray){
 
-    var provider = new firebase.auth.GoogleAuthProvider();
+ var provider = new firebase.auth.GoogleAuthProvider();
 
-  this.authorize = function(){
-    console.log("User is: " + $scope.loggedIn);
-    return $scope.loggedIn;
+ var loggedIn = false;
+
+  this.isAuthorised = function(){
+    return loggedIn;
   };
+
+  this.authorise = function(value){
+    loggedIn = value;
+  };
+
+  this.get = function(uid){
+      var def = $q.defer();
+      var userRef = firebase.database().ref().child("userInfo");
+      var userInfoRef = userRef.orderByChild("uid").equalTo(uid);
+      $firebaseArray(userInfoRef).$loaded().then(function(snap){
+          def.resolve(snap);
+      });
+      return def.promise;
+  };
+
+  this.setUserInfo = function(uid, profile){
+      firebase.database().ref('userInfo/').push({
+              uid: uid,
+              name: profile.displayName,
+              email: profile.email,
+              photo: profile.photoURL
+      });
+  }
 
   this.login = function(email, password) {
       firebase.auth().signInWithPopup(provider).then(function(result) {

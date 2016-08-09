@@ -1,7 +1,10 @@
-angular.module('starter').controller('AccountCtrl', function($scope, $ionicPopup, $firebaseAuth) {
-    $scope.settings = {
-      enableFriends: true
-    };
+angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers, $ionicPopup, $firebaseAuth) {
+
+    $scope.wrestlers = Wrestlers.getAll();
+
+    $scope.delete = function(wrestler){
+        Wrestlers.delete(wrestler);
+    }
 
     $scope.addWrestler = function(){
       $scope.newWrestler = {};

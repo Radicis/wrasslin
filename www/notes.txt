@@ -1,0 +1,7 @@
+Remove accordian on dash event
+Add click to expand events view to show results
+Add + to add new match to event instead of just clicking on the item
+Move Add wrestler to the add match popup
+Add rootscope variables
+Add user profile creation logic
+Move as much as possible to services

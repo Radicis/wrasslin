@@ -1,4 +1,4 @@
-angular.module('starter').controller('DashCtrl', function($scope, Events, Matches, Votes, UserInfo, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
+angular.module('starter').controller('DashCtrl', function($scope, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
 
     var ref = firebase.database().ref();
     $scope.userPoints = [];
@@ -6,43 +6,21 @@ angular.module('starter').controller('DashCtrl', function($scope, Events, Matche
     $scope.events = Events.getActive();
 
     $scope.getMatches = function(event){
-      var matches = $firebaseArray(ref.child('matches').orderByChild("eventId").equalTo(event.$id));
-      var votes = [];
-      matches.$loaded().then(function(){
-        angular.forEach(matches, function(key){
-          $scope.getVotes(key);
-        });
-        event.matches = matches;
-      });
-      $scope.getPoints(event);
-    };
-
-    $scope.getVotes = function(match){
-     var votes = $firebaseArray(ref.child('votes').orderByChild("matchId").equalTo(match.$id));
-     votes.$loaded().then(function(){
-        match.votes = votes;
-     })
-    };
-
-    $scope.getPoints = function(event){
-      event.userPoints = [];
-      Votes.getByEvent(event.$id).then(function(x) {
-        angular.forEach(x, function(key){
-          var points = 0;
-          angular.forEach(event.userPoints, function(key){
-            //if(key.uid===????)
+      Events.getMatches(event).then(function(x){
+          event.matches = x;
+          angular.forEach(event.matches, function(match){
+               Matches.getVotes(match).then(function(x){
+                   match.votes = x;
+               });
           });
-          // loop to increment points for each point???
-            UserInfo.get(key.uid).then(function(info){
-                event.userPoints.push({uid: info[0].uid, name: info[0].name, points: points});
-            });
-        });
       });
+      event.userPoints = Events.getPoints(event);
     };
 
     $scope.vote = function(eventId, matchId, wrestler){
       var uid = firebase.auth().currentUser.uid;
-      UserInfo.get(uid).then(function(info){
+      Auth.get(uid).then(function(info){
+        console.log(uid);
         var username = info[0].name;
         Votes.getByMatch(matchId).then(function(x) {
            if(Votes.hasUserVoted(uid, x)){
@@ -54,6 +32,7 @@ angular.module('starter').controller('DashCtrl', function($scope, Events, Matche
             firebase.database().ref('votes/').push({
               uid: uid,
               name: username,
+              img: info[0].photo,
               vote: wrestler,
               date: new Date().toISOString(),
               matchId: matchId,

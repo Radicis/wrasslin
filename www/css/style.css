@@ -2,6 +2,7 @@
   text-align:center;
 }
 
+
 .fullWidth {
   width: 100%; /* Or whatever you'd like the width to be */
 }
@@ -10,10 +11,18 @@
   left: 20px;
 }
 
+.lessPadding{
+    padding: 5px !important;
+}
+
+.header{
+    font-size:1.75em !important;
+}
+
 .isWinner{
   font-weight:bold;
   color:green;
-  font-size:1.5em;
+  font-size:1.2em;
 }
 
 .list .item.item-accordion {

@@ -1,5 +1,6 @@
-angular.module('starter').service('Matches', function($firebaseArray, $firebaseObject) {
+angular.module('starter').service('Matches', function($q, $firebaseArray, $firebaseObject) {
 
+  var ref = firebase.database().ref();
   var matchesRef = firebase.database().ref().child("matches/");
   var matches = $firebaseArray(matchesRef);
 
@@ -15,8 +16,21 @@ angular.module('starter').service('Matches', function($firebaseArray, $firebaseO
       return matches.$getRecord(matchId);
   }
 
+  this.getVotes = function(match){
+    var def = $q.defer();
+    var votes = $firebaseArray(ref.child('votes').orderByChild("matchId").equalTo(match.$id));
+    votes.$loaded().then(function(snap){
+        def.resolve(snap);
+      });
+      return def.promise;
+  };
+
   this.getByEvent = function(eventId){
-      var eventMatches = $firebaseObject(matchesRef.orderByChild("eventId").equalTo(eventId));
-      return eventMatches;
+      var def = $q.defer();
+      var eventMatches = $firebaseArray(matchesRef.orderByChild("eventId").equalTo(eventId));
+      eventMatches.$loaded().then(function(snap){
+        def.resolve(snap);
+      })
+      return def.promise;
   }
 });
