@@ -14,7 +14,7 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
         { text: 'Cancel' },
         {
           text: '<b>Delete</b>',
-          type: 'button-positive',
+          type: 'button-assertive',
           onTap: function(e) {
             console.log($scope.check.confirmDelete);
             if ($scope.check.confirmDelete==true) {
@@ -39,7 +39,7 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
         { text: 'Cancel' },
         {
           text: '<b>Save</b>',
-          type: 'button-positive',
+          type: 'button-balanced',
           onTap: function(e) {
             if (!$scope.newWrestler.name) {
               e.preventDefault();

@@ -18,16 +18,165 @@ $dark:                            #444 !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
-// Include all of Ionic
-@import "www/lib/ionic/scss/ionic";
 
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
-$positive:                        #ffffff !default;
+$light:                           #eee !default;
+$stable:                          #ccc !default;
+$positive:                        #387ef5 !default;
 $calm:                            #11c1f3 !default;
 $balanced:                        #33cd5f !default;
 $energized:                       #ffc900 !default;
-$assertive:                       #ef473a !default;
+$assertive:                       #ff0000 !default;
 $royal:                           #886aea !default;
-$dark:                            #444 !default;
+$dark:                            #222 !default;
+$grim:                            #33383e !default;
+$darker:                          #777 !default;
+$dull:                            #ccc !default;
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+
+@import url(http://fonts.googleapis.com/css?family=Oxygen);
+$font-family-base: "Oxygen", sans-serif !default;
+
+
+.center{
+  text-align:center;
+}
+
+.scroll-content{
+  background-color:$dark;
+  padding:0;
+}
+
+.pull-right{
+  float:right;
+}
+
+.scoresButton{
+  padding:2px;
+  min-height:0;
+  border-radius: 30px 30px 30px 30px;
+  -moz-border-radius: 30px 30px 30px 30px;
+  -webkit-border-radius: 30px 30px 30px 30px;
+  border: 3px inset $balanced;
+  background-color:$dark;
+  color:$stable;
+
+}
+
+h2{
+  color:$stable;
+}
+
+.button.button-balanced, .bar.bar-balanced.title {
+  border-color: transparent;
+  background-color: $balanced;
+  color: $dark;
+}
+
+.item.item-dark{
+  background-color:$grim;
+  color:$stable;
+  border:1px solid $dark;
+  transition: 0.2s all linear;
+}
+
+.list{
+  transition: 0.2s all linear;
+}
+
+.fade-in {
+  -webkit-transform: scale(0.0);
+  transform: scale(0.0);
+  opacity: 0;
+}
+.fade-in.ng-enter, .fade-in > .ng-enter {
+  -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 250ms;
+  transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 250ms;
+}
+.fade-in.ng-enter-active,
+.fade-in > .ng-enter-active {
+  -webkit-transform: scale(1.0);
+  transform: scale(1.0);
+  opacity: 1;
+}
+
+.fade-in.ng-leave, .fade-in > .ng-leave {
+  -webkit-transition: all ease-in-out 250ms;
+  transition: all ease-in-out 250ms;
+}
+
+.item p{
+  color:$dull;
+}
+
+.dark{
+  background-color:$dark;
+  color:$light;
+}
+
+.darker{
+  color:$darker;
+  background-color:$darker;
+}
+
+.headerimg{
+  width:100%;
+}
+
+.noborder{
+  border:none;
+}
+
+.fullWidth {
+  width: 100%; /* Or whatever you'd like the width to be */
+}
+
+.fullWidth select {
+  left: 20px;
+}
+
+.lessPadding{
+  padding: 5px !important;
+}
+
+.header{
+  font-size:1.75em !important;
+}
+
+.isWinner{
+  font-weight:bold;
+  color:$balanced;
+  font-size:1.2em;
+}
+
+.epic{
+  border:2px groove $balanced;
+}
+
+
+.activeGroup{
+  background-color:$grim;
+  padding:2px;
+}
+
+.list .item.item-accordion {
+  line-height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: 0.2s all linear;
+}
+.list .item.item-accordion.ng-hide {
+  line-height: 0px;
+  transition: 0.2s all linear;
+}
+.list .item.item-accordion.ng-hide-add,
+.list .item.item-accordion.ng-hide-remove {
+  display: block !important;
+  transition: 0.2s all linear;
+}
+
+
+
+
+
 

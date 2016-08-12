@@ -20,7 +20,7 @@
             <div ng-class="{activeGroup: isGroupShown(match)}">
               <h2 class="title padding center">
                 <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
-              <button ng-if=match.active class="button button-positive" ng-click="setWinner(match, event)">Set Winner</button>
+              <button ng-if=match.active class="button button-balaned" ng-click="setWinner(match, event)">Set Winner</button>
               <h2 ng-if="match.votes.length>0">Votes: {{match.votes.length}}</h2>
               <ion-list>
                 <ion-item class="item-avatar" ng-repeat="vote in match.votes" class="item-accordion center" ng-show="isGroupShown(match)">
@@ -28,11 +28,11 @@
                 </ion-item>
               </ion-list>
               <div ng-if="match.active && isAuthorised() && !hasUserVoted(match)">
-                <button class="button button-block button-positive" ng-click="vote(event, match, match.p1)">
+                <button class="button button-block button-balaned" ng-click="vote(event, match, match.p1)">
                   {{match.p1}}
                 </button>
                 VS
-                <button class="button button-block button-positive" ng-click="vote(event, match, match.p2)">
+                <button class="button button-block button-balaned" ng-click="vote(event, match, match.p2)">
                   {{match.p2}}
                 </button>
               </div>

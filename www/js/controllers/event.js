@@ -42,7 +42,7 @@ angular.module('starter').controller('EventDetailCtrl', function($scope, Auth, P
         { text: 'Cancel' },
         {
           text: '<b>Save</b>',
-          type: 'button-positive',
+          type: 'button-balaned',
           onTap: function(e) {
             if (!$scope.newMatch.p1 || !$scope.newMatch.p2) {
               alert("Try again");

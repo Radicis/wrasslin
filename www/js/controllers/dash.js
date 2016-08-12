@@ -1,7 +1,6 @@
-angular.module('starter').controller('DashCtrl', function($scope, $window, Points, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
+angular.module('starter').controller('DashCtrl', function($scope, $window,$ionicModal, Points, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
 
   var ref = firebase.database().ref();
-  $scope.userPoints = [];
 
   $scope.events = Events.getActive();
 
@@ -24,12 +23,26 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, Point
       points.forEach(function(point){
         Auth.get(point.uid).then(function(userInfo){
           Points.getByReference(point.uid + point.eventId).$loaded().then(function(uPoint){
-            event.userPoints.push({uid: uPoint.uid, name: userInfo[0].name, points: uPoint.points});
+            event.userPoints.push({uid: uPoint.uid, img:userInfo[0].photo, name: userInfo[0].name, points: uPoint.points});
           });
         });
       });
     });
   };
+
+  $scope.showScore = function(event){
+    $scope.event = event;
+    var myPopup = $ionicPopup.show({
+      templateUrl: 'templates/showScore.html',
+      title: 'Scores',
+      scope: $scope,
+      buttons: [
+        { text: 'Close' }
+      ]
+    });
+  };
+
+
 
   $scope.vote = function(event, match, wrestler){
     var uid = firebase.auth().currentUser.uid;

@@ -4,46 +4,47 @@
       Log In
     </button>
     <button ng-if="isAuthorised()" class="button" ng-click="logout()">
-     Log Out
+      Log Out
     </button>
   </ion-nav-buttons>
   <ion-content>
-      <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
+    <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
     <ion-list>
-      <img class="headerimg" src="./img/mainevent.png" />
-    <div ng-repeat="event in events | orderBy: '-date'" ng-init="getEventInfo(event)">
-      <ion-item type="item-text-wrap">
-        <h2 class="header">{{event.name}}</h2>
-        <span>{{event.location}} : {{event.date | date:dateFormat}}</span>
-        <ion-list>
-          <div class="col" ng-repeat="points in event.userPoints | orderBy: 'points.points'">{{points.name}} : {{points.points}} points</div>
-        </ion-list>
-          <ion-item class="lessPadding center"
-          ng-click="toggleGroup(match)"
-          class="padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
-          <div ng-class="{activeGroup: isGroupShown(match)}">
+      <div class="center">
+        <img class="headerimg" src="./img/banner.jpg" />
+      </div>
+      <div ng-repeat="event in events | orderBy: '-date'" ng-init="getEventInfo(event)">
+        <ion-item class="item-dark">
+          <button class="pull-right button scoresButton" ng-click="showScore(event)">Score</button>
+          <h2 class="header">{{event.name}}</h2>
+          <small>{{event.location}} : {{event.date | date:dateFormat}}</small>
+          <hr>
+          <ion-item class="lessPadding center item-dark"
+                    ng-click="toggleGroup(match)"
+                    class="padding darker center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
+            <div ng-class="{activeGroup: isGroupShown(match)}">
               <h2 class="title padding center">
                 <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
-            <button ng-if=match.active class="button button-positive" ng-click="setWinner(match, event)">Set Winner</button>
-            <h2 ng-if="match.votes.length>0">Votes: {{match.votes.length}}</h2>
-            <ion-list>
-              <ion-item class="item-avatar" ng-repeat="vote in match.votes" class="item-accordion center" ng-show="isGroupShown(match)">
-                 <img src="{{vote.img}}" /><p class="padding-top"><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p>
-              </ion-item>
-            </ion-list>
-            <div ng-if="match.active && isAuthorised() && !hasUserVoted(match)">
-              <button class="button button-block button-positive" ng-click="vote(event, match, match.p1)">
-                {{match.p1}}
-              </button>
-              VS
-              <button class="button button-block button-positive" ng-click="vote(event, match, match.p2)">
-                {{match.p2}}
-              </button>
+              <button ng-if=match.active class="button button-balanced" ng-click="setWinner(match, event)">Set Winner</button>
+              <h2 ng-if="match.votes.length>0">Votes: {{match.votes.length}}</h2>
+              <ion-list>
+                <ion-item ng-repeat="vote in match.votes" class="item-accordion center item-avatar noborder item-dark" ng-show="isGroupShown(match)">
+                  <img src="{{vote.img}}" /><p class="padding-top"><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p>
+                </ion-item>
+              </ion-list>
+              <div ng-if="match.active && isAuthorised() && !hasUserVoted(match)">
+                <button class="button button-block button-balanced" ng-click="vote(event, match, match.p1)">
+                  {{match.p1}}
+                </button>
+                VS
+                <button class="button button-block button-balanced" ng-click="vote(event, match, match.p2)">
+                  {{match.p2}}
+                </button>
+              </div>
             </div>
-        </div>
+          </ion-item>
         </ion-item>
-      </ion-item>
-  </div>
-  </ion-list>
+      </div>
+    </ion-list>
   </ion-content>
 </ion-view>

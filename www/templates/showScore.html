@@ -1,0 +1,11 @@
+<div class="bar bar-header bar-balanced">
+  <h1 class="title">Scores</h1>
+</div>
+<div class="list">
+  <a ng-repeat="point in event.userPoints" class="item item-avatar dark" href="#">
+    <img src="{{point.img}}">
+    <p>{{point.name}} <br>{{point.points}} point(s)</p>
+  </a>
+</div>
+
+
