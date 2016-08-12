@@ -13,35 +13,35 @@ angular.module('starter').service('Matches', function($q, $firebaseArray, $fireb
   };
 
   this.get = function(matchId){
-      return matches.$getRecord(matchId);
+    return matches.$getRecord(matchId);
   }
 
   this.getVotes = function(match){
     var def = $q.defer();
     var votes = $firebaseArray(ref.child('votes').orderByChild("matchId").equalTo(match.$id));
     votes.$loaded().then(function(snap){
-        def.resolve(snap);
-      });
-      return def.promise;
+      def.resolve(snap);
+    });
+    return def.promise;
   };
 
   this.hasuserVoted = function(match, uid){
-      var voted = false;
-      match.votes.forEach(function(vote){
-        if(vote.uid==uid){
-         console.log("its true");
-          voted =  true;
-        }
-      });
-      return voted;
+    var voted = false;
+    match.votes.forEach(function(vote){
+      if(vote.uid==uid){
+        console.log("its true");
+        voted =  true;
+      }
+    });
+    return voted;
   }
 
   this.getByEvent = function(eventId){
-      var def = $q.defer();
-      var eventMatches = $firebaseArray(matchesRef.orderByChild("eventId").equalTo(eventId));
-      eventMatches.$loaded().then(function(snap){
-        def.resolve(snap);
-      })
-      return def.promise;
+    var def = $q.defer();
+    var eventMatches = $firebaseArray(matchesRef.orderByChild("eventId").equalTo(eventId));
+    eventMatches.$loaded().then(function(snap){
+      def.resolve(snap);
+    })
+    return def.promise;
   }
 });

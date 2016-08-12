@@ -9,16 +9,20 @@
         <div class="item item-divider">
     Singles
   </div>
-        <ion-item class="item-avatar" on-hold="delete(wrestler)" ng-repeat="wrestler in single | orderBy: 'name'">
-           <img class="epic" src="{{wrestler.pic}}" /><p class="padding-top"><strong>{{wrestler.name}}</strong> </p>
+        <ion-item class="item-avatar item-icon-left" on-hold="delete(wrestler)" ng-repeat="wrestler in single | orderBy: 'name'">
+          <img ng-if="wrestler.pic" class="epic" src="{{wrestler.pic}}" />
+          <i ng-if="!wrestler.pic" class="icon ion-person"></i>
+          <p class="padding-top"><strong>{{wrestler.name}}</strong> </p>
         </ion-item>
     </ion-list>
     <div class="item item-divider">
 Teams
 </div>
     <ion-list>
-        <ion-item class="item-avatar" on-hold="delete(wrestler)" ng-repeat="wrestler in tag | orderBy: 'name'">
-           <img class="epic" src="{{wrestler.pic}}" /><p class="padding-top"><strong>{{wrestler.name}}</strong> </p>
+        <ion-item class="item-avatar item-icon-left" on-hold="delete(wrestler)" ng-repeat="wrestler in tag | orderBy: 'name'">
+          <img ng-if="wrestler.pic" class="epic" src="{{wrestler.pic}}" />
+          <i ng-if="!wrestler.pic" class="icon ion-person-stalker"></i>
+          <p class="padding-top"><strong>{{wrestler.name}}</strong> </p>
         </ion-item>
     </ion-list>
   </ion-content>

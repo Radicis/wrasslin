@@ -14,16 +14,16 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
   };
 
   this.get = function(eventId){
-      return events.$getRecord(eventId);
+    return events.$getRecord(eventId);
   }
 
   this.getMatches = function(event){
     var def = $q.defer();
     //var votes = [];
     Matches.getByEvent(event.$id).then(function(matches){
-        def.resolve(matches);
-      });
-      return def.promise;
+      def.resolve(matches);
+    });
+    return def.promise;
   }
 
 
@@ -34,12 +34,12 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
         var points = 0;
         angular.forEach(event.userPoints, function(vote){
           if(key.uid==vote.uid){
-              points++
+            points++
           }
         });
-          Auth.get(vote.uid).then(function(userInfo){
-              event.userPoints.push({uid: vote.uid, name: userInfo[0].name, points: points});
-          });
+        Auth.get(vote.uid).then(function(userInfo){
+          event.userPoints.push({uid: vote.uid, name: userInfo[0].name, points: points});
+        });
       });
     });
     return userPoints;

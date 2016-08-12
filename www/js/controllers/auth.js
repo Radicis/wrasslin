@@ -12,8 +12,8 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
   firebase.initializeApp(config);
 
   $scope.isAuthorised = function(){
-      return Auth.isAuthorised();
-  }
+    return Auth.isAuthorised();
+  };
 
   $scope.login = function() {
     Auth.login();
@@ -24,7 +24,7 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
       console.log("Signed in with: " + user.uid);
       Auth.authorise(true);
       user.providerData.forEach(function (profile) {
-          Auth.setUserInfo(user.uid, profile);
+        Auth.setUserInfo(user.uid, profile);
       });
       //$route.reload();
     } else {
@@ -64,5 +64,5 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
 
   $scope.logout = function(){
     Auth.signOut();
-  }; 
+  };
 })

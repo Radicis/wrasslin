@@ -10,22 +10,22 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
 
 
   this.get = function(pointsId){
-      return points.$getRecord(pointsId);
+    return points.$getRecord(pointsId);
   }
 
   this.getByEvent = function(event){
-      var def = $q.defer();
-      var eventPoints = $firebaseArray(pointsRef.orderByChild("eventId").equalTo(event.$id));
-      eventPoints.$loaded().then(function(snap){
-        def.resolve(snap);
-      });
-      return def.promise;
+    var def = $q.defer();
+    var eventPoints = $firebaseArray(pointsRef.orderByChild("eventId").equalTo(event.$id));
+    eventPoints.$loaded().then(function(snap){
+      def.resolve(snap);
+    });
+    return def.promise;
   }
 
   this.getByReference = function(uniqueRef){
-      var pointsRef = firebase.database().ref().child("points");
-      var uPoints = $firebaseObject(pointsRef.child(uniqueRef));
-      console.log(uPoints);
-      return uPoints;
+    var pointsRef = firebase.database().ref().child("points");
+    var uPoints = $firebaseObject(pointsRef.child(uniqueRef));
+    console.log(uPoints);
+    return uPoints;
   }
 });

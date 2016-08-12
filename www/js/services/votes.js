@@ -28,11 +28,11 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
   this.hasUserVoted = function(votes, uid){
     var dupe = false;
     if(votes){
-        votes.forEach(function(vote){
-          if(vote.uid==uid){
-            dupe = true;
-          }
-        });
+      votes.forEach(function(vote){
+        if(vote.uid==uid){
+          dupe = true;
+        }
+      });
     }
     return dupe;
   }

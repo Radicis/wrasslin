@@ -38,7 +38,7 @@ angular.module('starter').service('Wrestlers', function($q, $http, $firebaseArra
       };
 
     this.getWikiInfo = function(name){
-        return $http.jsonp('http://en.wikipedia.org/w/api.php?titles=' + name + '&action=query&format=json&prop=images%7Cpageimages&callback=JSON_CALLBACK');
+        return $http.jsonp('http://en.wikipedia.org/w/api.php?titles=' + name + '&action=query&format=json&prop=images%7Cpageimages&redirects=1&callback=JSON_CALLBACK');
     }
 
 

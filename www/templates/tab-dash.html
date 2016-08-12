@@ -10,6 +10,7 @@
   <ion-content>
       <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
     <ion-list>
+      <img class="headerimg" src="./img/mainevent.png" />
     <div ng-repeat="event in events | orderBy: '-date'" ng-init="getEventInfo(event)">
       <ion-item type="item-text-wrap">
         <h2 class="header">{{event.name}}</h2>
@@ -17,7 +18,7 @@
         <ion-list>
           <div class="col" ng-repeat="points in event.userPoints | orderBy: 'points.points'">{{points.name}} : {{points.points}} points</div>
         </ion-list>
-          <ion-item class="item-stable lessPadding center"
+          <ion-item class="lessPadding center"
           ng-click="toggleGroup(match)"
           class="padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
           <div ng-class="{activeGroup: isGroupShown(match)}">
