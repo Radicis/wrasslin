@@ -19,14 +19,15 @@
         </ion-list>
           <ion-item class="item-stable lessPadding center"
           ng-click="toggleGroup(match)"
-          ng-class="{active: isGroupShown(event)}" class="padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
+          class="padding center" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
+          <div ng-class="{activeGroup: isGroupShown(match)}">
               <h2 class="title padding center">
                 <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
             <button ng-if=match.active class="button button-positive" ng-click="setWinner(match, event)">Set Winner</button>
             <h2 ng-if="match.votes.length>0">Votes: {{match.votes.length}}</h2>
             <ion-list>
               <ion-item class="item-avatar" ng-repeat="vote in match.votes" class="item-accordion center" ng-show="isGroupShown(match)">
-                 <img src="{{vote.img}}" /><strong>{{vote.name}}</strong> </br> voted <strong>{{vote.vote}}</strong>
+                 <img src="{{vote.img}}" /><p class="padding-top"><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p>
               </ion-item>
             </ion-list>
             <div ng-if="match.active && isAuthorised() && !hasUserVoted(match)">
@@ -38,6 +39,7 @@
                 {{match.p2}}
               </button>
             </div>
+        </div>
         </ion-item>
       </ion-item>
   </div>

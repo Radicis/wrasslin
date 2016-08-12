@@ -21,17 +21,13 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, Point
       });
       Points.getByEvent(event).then(function(points){
           event.userPoints = [];
-          // create array here
           points.forEach(function(point){
-              // total up all poitns and associate with user
-              event.userPoints.forEach(function(userPoint){
-                //   if(userPoint.uid==point.uid){
-                //       userPoint.points = userPoint.points + 1;
-                //   }
-              });
-
-          })
-          event.userPoints = points;
+              Auth.get(point.uid).then(function(userInfo){
+                Points.getByReference(point.uid + point.eventId).$loaded().then(function(uPoint){
+                    event.userPoints.push({uid: uPoint.uid, name: userInfo[0].name, points: uPoint.points});
+                });
+            });
+          });
       });
     };
 
@@ -93,23 +89,29 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, Point
         console.log("Match won by:" + $scope.winner.name);
         var matchRef = firebase.database().ref().child("matches").child(match.$id);
         matchRef.update({winner: $scope.winner.name, active: false});
-        $scope.assignPoints(match, event, $scope.winner.name);
+        $scope.assignPoints(match, event, $scope.winner.name, 1);
         $scope.doRefresh();
       });
     };
 
-    $scope.assignPoints = function(match, event, winner){
+    $scope.assignPoints = function(match, event, winner, points){
         Votes.getByMatch(match.$id).then(function(matchVotes) {
             matchVotes.forEach(function(vote){
+                var pointsRef = vote.uid + event.$id;
                 if(vote.vote==winner){
-                    firebase.database().ref('points').push({
-                        uid: vote.uid,
-                        eventId: event.$id,
-                        matchId: match.$id,
-                        points: 1
-                    });
+                    Points.getByReference(pointsRef).$loaded().then(function(uPoints){
+                        if(uPoints.points>0){
+                            points = uPoints.points + points;
+                        }
+                        firebase.database().ref('points').child(pointsRef).set({
+                            uid: vote.uid,
+                            eventId: event.$id,
+                            matchId: match.$id,
+                            points: points,
+                        });
+                    })
                 }
-            });
+        });
     });
 }
     /*

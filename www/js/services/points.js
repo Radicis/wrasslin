@@ -13,14 +13,6 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
       return points.$getRecord(pointsId);
   }
 
-  // this.getByUserEvent = function(uid, event){
-  //     var def = $q.defer();
-  //     var eventPoints = $firebaseArray(pointsRef.orderByChild("eventId").equalTo(event.$id));
-  //     eventPoints.$loaded().then(function(snap){
-  //         def.resolve(snap);
-  //     });
-  // }
-
   this.getByEvent = function(event){
       var def = $q.defer();
       var eventPoints = $firebaseArray(pointsRef.orderByChild("eventId").equalTo(event.$id));
@@ -30,4 +22,10 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
       return def.promise;
   }
 
+  this.getByReference = function(uniqueRef){
+      var pointsRef = firebase.database().ref().child("points");
+      var uPoints = $firebaseObject(pointsRef.child(uniqueRef));
+      console.log(uPoints);
+      return uPoints;
+  }
 });
