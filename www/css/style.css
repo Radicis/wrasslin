@@ -25,6 +25,11 @@
   font-size:1.2em;
 }
 
+.epic{
+    border:2px solid #0c60ee;
+}
+
+
 .activeGroup{
     background-color:#eee;
     padding:2px;

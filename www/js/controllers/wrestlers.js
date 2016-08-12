@@ -1,6 +1,8 @@
-angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers, $ionicPopup, $firebaseAuth) {
+angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers,$ionicPopup, $firebaseAuth) {
 
-    $scope.wrestlers = Wrestlers.getAll();
+    $scope.single = Wrestlers.getAllSingle();
+
+    $scope.tag = Wrestlers.getAllTag();
 
     $scope.delete = function(wrestler){
         $scope.check = {};
@@ -49,12 +51,24 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
         ]
       });
       myPopup.then(function(res) {
-        firebase.database().ref('wrestlers/').push({
-          isTeam: $scope.newWrestler.isTeam,
-          name:  $scope.newWrestler.name,
-          active: true
-        });
-        console.log('Created!', $scope.newWrestler.name);
+          var wrass = Wrestlers.getWikiInfo($scope.newWrestler.name);
+          var img;
+          wrass.then(function(response){
+                try{
+                  var pageId = response.data.continue.imcontinue.split("|")[0];
+                  var pages = response.data.query.pages;
+                  var imgsrc = pages[pageId];
+                  img = imgsrc.thumbnail.source;
+              }catch(err){img = null}
+                  firebase.database().ref('wrestlers/').push({
+                    isTeam: $scope.newWrestler.isTeam,
+                    name:  $scope.newWrestler.name,
+                    active: true,
+                    pic: img
+                  });
+                  console.log('Created!', $scope.newWrestler.name);
+              });
+
       });
     };
 

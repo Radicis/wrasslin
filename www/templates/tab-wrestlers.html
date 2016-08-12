@@ -6,10 +6,20 @@
     </ion-nav-buttons>
   <ion-content>
     <ion-list>
-        <ion-item class="item-icon-left" on-hold="delete(wrestler)" ng-repeat="wrestler in wrestlers | orderBy: 'name'">
-            <i ng-if="!wrestler.isTeam" class="icon ion-ios-person"></i>
-            <i ng-if="wrestler.isTeam" class="icon ion-ios-people"></i>
-            {{wrestler.name}} </ion-item>
+        <div class="item item-divider">
+    Singles
+  </div>
+        <ion-item class="item-avatar" on-hold="delete(wrestler)" ng-repeat="wrestler in single | orderBy: 'name'">
+           <img class="epic" src="{{wrestler.pic}}" /><p class="padding-top"><strong>{{wrestler.name}}</strong> </p>
+        </ion-item>
+    </ion-list>
+    <div class="item item-divider">
+Teams
+</div>
+    <ion-list>
+        <ion-item class="item-avatar" on-hold="delete(wrestler)" ng-repeat="wrestler in tag | orderBy: 'name'">
+           <img class="epic" src="{{wrestler.pic}}" /><p class="padding-top"><strong>{{wrestler.name}}</strong> </p>
+        </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
