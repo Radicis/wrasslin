@@ -9,7 +9,9 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
     $scope.$broadcast('scroll.refreshComplete');
   };
 
+
   $scope.getEventInfo = function(event){
+    event.userPoints = {};
     Events.getMatches(event).then(function(matches){
       event.matches = matches;
       angular.forEach(event.matches, function(match){
@@ -18,15 +20,8 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
         });
       });
     });
-    Points.getByEvent(event).then(function(points){
-      event.userPoints = [];
-      points.forEach(function(point){
-        Auth.get(point.uid).then(function(userInfo){
-          Points.getByReference(point.uid + point.eventId).$loaded().then(function(uPoint){
-            event.userPoints.push({uid: uPoint.uid, img:userInfo[0].photo, name: userInfo[0].name, points: uPoint.points});
-          });
-        });
-      });
+    Points.getEventPoints(event).then(function(points){
+      event.userPoints = points;
     });
   };
 

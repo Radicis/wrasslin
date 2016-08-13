@@ -37,6 +37,9 @@ $dull:                            #ccc !default;
 @import url(http://fonts.googleapis.com/css?family=Oxygen);
 $font-family-base: "Oxygen", sans-serif !default;
 
+html, .pane, .view {
+  background-color:$dark;
+}
 
 .center{
   text-align:center;
@@ -60,7 +63,6 @@ $font-family-base: "Oxygen", sans-serif !default;
   border: 3px inset $balanced;
   background-color:$dark;
   color:$stable;
-
 }
 
 h2{
@@ -109,6 +111,7 @@ h2{
   color:$dull;
 }
 
+
 .dark{
   background-color:$dark;
   color:$light;
@@ -150,7 +153,7 @@ h2{
 }
 
 .epic{
-  border:2px groove $balanced;
+  border:2px inset $balanced;
 }
 
 

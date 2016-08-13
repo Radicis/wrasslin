@@ -21,6 +21,10 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
     Auth.login();
   };
 
+  $scope.isCreator = function(event){
+    return Auth.isCreator(event);
+  };
+
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       console.log("Signed in with: " + user.uid);

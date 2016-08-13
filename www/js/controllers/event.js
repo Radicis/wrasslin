@@ -28,6 +28,47 @@ angular.module('starter').controller('EventDetailCtrl', function($scope, Auth, P
     });
   };
 
+  var comparePoints = function(a,b) {
+    if (a.points < b.points)
+      return -1;
+    if (a.last_nom > b.last_nom)
+      return 1;
+    return 0;
+  };
+
+  $scope.eventComplete = function(event){
+
+    var winner = null;
+
+    Points.getEventPoints(event).then(function(points){
+      console.log(points)
+      console.log(points[0]);
+      points.sort(comparePoints);
+      winner = points[0].name;
+    });
+
+      // get max of userPoints
+      // event.userPoints.forEach(function(points){
+      //   if(points.points>winnerPoints){
+      //     winner.name = points.name,
+      //     winner.points = points.points
+      //   }
+      //   // account for tie
+      // });
+    // });
+
+    if(winner) {
+      firebase.database().ref('events').child(event.$id).set({
+        name: event.name,
+        location: event.location,
+        date: event.date,
+        active: false,
+        owner: event.owner,
+        winner: winner
+      });
+    }
+  };
+
   $scope.addMatch = function(){
 
     $scope.newMatch = {};

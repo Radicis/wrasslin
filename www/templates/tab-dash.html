@@ -11,8 +11,7 @@
     <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
     <ion-list>
       <div class="center">
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-        <img class="headerimg" src="./img/banner.jpg" />
+        <img class="headerimg" src="../img/banner.jpg" />
       </div>
       <div ng-repeat="event in events | orderBy: '-date'" ng-init="getEventInfo(event)">
         <ion-item class="item-dark">
@@ -26,11 +25,11 @@
             <div ng-class="{activeGroup: isGroupShown(match)}">
               <h2 class="title padding center">
                 <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
-              <button ng-if=match.active class="button button-balanced" ng-click="setWinner(match, event)">Set Winner</button>
+              <button ng-if="match.active && isCreator(event)" class="button button-balanced" ng-click="setWinner(match, event)">Set Winner</button>
               <h2 ng-if="match.votes.length>0">Votes: {{match.votes.length}}</h2>
               <ion-list>
                 <ion-item ng-repeat="vote in match.votes" class="item-accordion center item-avatar noborder item-dark" ng-show="isGroupShown(match)">
-                  <img src="{{vote.img}}" /><p class="padding-top"><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p>
+                  <img class="epic" src="{{vote.img}}" /><p class="padding-top"><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p>
                 </ion-item>
               </ion-list>
               <div ng-if="match.active && isAuthorised() && !hasUserVoted(match)">

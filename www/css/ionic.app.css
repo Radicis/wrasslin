@@ -9816,6 +9816,9 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+html, .pane, .view {
+  background-color: #222; }
+
 .center {
   text-align: center; }
 
@@ -9908,7 +9911,7 @@ h2 {
   font-size: 1.2em; }
 
 .epic {
-  border: 2px groove #33cd5f; }
+  border: 2px inset #33cd5f; }
 
 .activeGroup {
   background-color: #33383e;

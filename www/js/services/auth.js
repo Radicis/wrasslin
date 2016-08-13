@@ -22,6 +22,11 @@ angular.module('starter').service("Auth", function($q, $firebaseAuth, $cordovaOa
     return def.promise;
   };
 
+  this.isCreator = function(event){
+    var uid = firebase.auth().currentUser.uid;
+    return event.owner == uid;
+  };
+
   this.setUserInfo = function(uid, profile){
     firebase.database().ref('userInfo').child(uid).set({
       uid: uid,
@@ -80,7 +85,7 @@ angular.module('starter').service("Auth", function($q, $firebaseAuth, $cordovaOa
       // });
     }
     else {
-      firebase.auth().signInWithRedirect(provider).then(function (result) {
+      firebase.auth().signInWithPopup(provider).then(function (result) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.

@@ -15,7 +15,7 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
 
   this.get = function(eventId){
     return events.$getRecord(eventId);
-  }
+  };
 
   this.getMatches = function(event){
     var def = $q.defer();
@@ -24,7 +24,11 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
       def.resolve(matches);
     });
     return def.promise;
-  }
+  };
+
+  this.delete = function(event){
+    eventsRef.child(event.$id).remove();
+  };
 
 
   this.getPoints = function(event){

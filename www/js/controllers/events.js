@@ -1,4 +1,4 @@
-angular.module('starter').controller('EventCtrl', function($scope, $ionicPopup, $timeout, $firebaseArray, Events, $firebaseAuth) {
+angular.module('starter').controller('EventCtrl', function($scope, Auth, $ionicPopup, $timeout, $firebaseArray, Events, $firebaseAuth) {
 
   $scope.events = Events.getAll();
 
@@ -7,14 +7,14 @@ angular.module('starter').controller('EventCtrl', function($scope, $ionicPopup, 
   $scope.addEvent = function(){
     $scope.newEvent = {};
     var myPopup = $ionicPopup.show({
-      template: '<input type="text" placeholder="name"  ng-model="newEvent.name"><input type="text" placeholder="location" ng-model="newEvent.location">',
+      templateUrl: 'templates/addEvent.html',
       title: 'Enter Event Details',
       scope: $scope,
       buttons: [
         { text: 'Cancel' },
         {
           text: '<b>Create</b>',
-          type: 'button-positive',
+          type: 'button-balanced',
           onTap: function(e) {
             if (!$scope.newEvent.name) {
               e.preventDefault();
@@ -28,9 +28,33 @@ angular.module('starter').controller('EventCtrl', function($scope, $ionicPopup, 
     });
     myPopup.then(function(res) {
       createEvent($scope.newEvent.name, $scope.newEvent.location);
-      console.log('Created!', $scope.newEvent.name);
-      window.location = "#/tab/events/";
     });
+  };
+
+  $scope.delete = function(event){
+    if(Auth.isCreator(event)) {
+      $scope.check = {};
+      var myPopup = $ionicPopup.show({
+        templateUrl: 'templates/confirmDelete.html',
+        title: 'You sure?',
+        scope: $scope,
+        buttons: [
+          {text: 'Cancel'},
+          {
+            text: '<b>Delete</b>',
+            type: 'button-assertive',
+            onTap: function (e) {
+              console.log($scope.check.confirmDelete);
+              if ($scope.check.confirmDelete == true) {
+                Events.delete(event);
+              } else {
+                myPopup.close();
+              }
+            }
+          }
+        ]
+      });
+    }
   };
 
   var createEvent = function (name, location) {
