@@ -9,7 +9,6 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
     $scope.$broadcast('scroll.refreshComplete');
   };
 
-
   $scope.getEventInfo = function(event){
     event.userPoints = {};
     Events.getMatches(event).then(function(matches){
@@ -26,6 +25,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
   };
 
   $scope.showScore = function(event){
+    $scope.doRefresh();
     $scope.event = event;
     var myPopup = $ionicPopup.show({
       templateUrl: 'templates/showScore.html',
@@ -36,8 +36,6 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
       ]
     });
   };
-
-
 
   $scope.vote = function(event, match, wrestler){
     var uid = firebase.auth().currentUser.uid;

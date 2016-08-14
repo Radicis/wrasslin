@@ -11,7 +11,7 @@
     <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
     <ion-list>
       <div class="center">
-        <img class="headerimg" src="../img/banner.jpg" />
+        <img class="headerimg" src="./img/banner.jpg" />
       </div>
       <div ng-repeat="event in events | orderBy: '-date'" ng-init="getEventInfo(event)">
         <ion-item class="item-dark">
