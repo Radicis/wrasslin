@@ -1,10 +1,11 @@
-angular.module('starter').controller('DashCtrl', function($scope, $window,$ionicModal,$ionicLoading, Points, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
+angular.module('starter').controller('DashCtrl', function($scope, $window,$ionicModal,$ionicLoading, $state, Points, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
 
   // Pull the full list of active events from the Events service
   $scope.show();
   Events.getActive().then(function(events){
       $scope.events = events;
       $scope.hide();
+      console.log(events);
   })
 
   // Refreshes the scope in the case where the update is in memory and not in firebase
@@ -16,6 +17,11 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
           $scope.hide();
       });
   };
+
+  // Directs the user to events page
+  $scope.goToEvents = function(){
+      $state.go("tab.events");
+  }
 
   // Populates the event object (in memory) with its related matches, votes and points
   $scope.getEventInfo = function(event){

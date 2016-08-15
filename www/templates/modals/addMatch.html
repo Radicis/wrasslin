@@ -51,3 +51,25 @@
     </select>
   </label>
 </div>
+
+<div class="list" ng-show="selectedMatchtype == matchTypes[2]">
+  <label class="item item-input item-select">
+    <div class="input-label">
+      &nbsp;
+    </div>
+    <select ng-options="item as item.name for item in wrestlers"
+            ng-model="newMatch.p1">
+    </select>
+  </label>
+</div>
+
+<div class="list" ng-show="selectedMatchtype == matchTypes[3]">
+  <label class="item item-input item-select">
+    <div class="input-label">
+      &nbsp;
+    </div>
+    <select ng-options="item as item.name for item in wrestlers"
+            ng-model="newMatch.p1">
+    </select>
+  </label>
+</div>

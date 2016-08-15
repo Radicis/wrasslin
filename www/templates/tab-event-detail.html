@@ -5,29 +5,22 @@
       </button>
     </ion-nav-buttons>
   <ion-content delegate-handle="scrollArea">
-    <div class="padding">
-      <button ng-if="event.active && isCreator(event)" class="pull-right button scoresButton" ng-click="eventComplete(event)">Finish</button>
-      <h2 class="header">{{event.name}}</h2>
-      <span class="light">{{event.location}} : {{event.date | date:dateFormat}}</span>
-      <span ng-if="event.winner">Winner: {{event.winner}}</span>
-    </div>
     <ion-list>
-      <div>
-        <ion-item type="item-text-wrap" class="item-dark">
-          <ion-item class="lessPadding center item-dark" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
+        <ion-item class="item-dark">
+              <button ng-if="event.active && isCreator(event)" class="pull-right button scoresButton" ng-click="eventComplete(event)">Finish</button>
+              <button ng-if"!event.active" class="pull-right button scoresButton" ng-click="showScore(event)">Score</button>
+              <h2 class="header">{{event.name}}</h2>
+              <p class="dull">{{event.location}} : {{event.date | date:dateFormat}}</p>
+              <p class="light" ng-if="event.winner">Champion: <strong>{{event.winner}}</strong></p>
+        </ion-item>
+        <ion-item class="item-dark">
+          <ion-item class="noPadding center item-dark" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
             <div>
               <h2 class="title padding center">
                 <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
-              <ion-list>
-                <ion-item class="item-avatar" ng-repeat="vote in match.votes" class="item-accordion center" ng-show="isGroupShown(match)">
-                  <img src="{{vote.img}}" /><p class="padding-top"><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p>
-                </ion-item>
-              </ion-list>
             </div>
           </ion-item>
         </ion-item>
-      </div>
     </ion-list>
   </ion-content>
-
 </ion-view>

@@ -1,13 +1,16 @@
 <ion-view view-title="Events">
   <ion-nav-buttons side="right">
-    <button ng-if="isAuthorised()" class="button" ng-click="addEvent()">
-      Add New
+    <button ng-if="isAuthorised()" class="button icon-right ion-plus" ng-click="addEvent()">
     </button>
   </ion-nav-buttons>
   <ion-content delegate-handle="scrollArea">
     <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
     <div class="center">
       <img class="headerimg" src="./img/banner.jpg" />
+    </div>
+    <div class="center" ng-if="events.length<=0">
+        <h3 class="light">No active events</h3>
+        <button ng-if="isAuthorised()" class="button button-clear button-balanced" ng-click="addEvent()">Create Event</button>
     </div>
     <ion-list>
       <ion-item class="item-remove-animate item-icon-right item-dark" on-hold="delete(event)" ng-repeat="event in events | orderBy: '-date'" type="item-text-wrap" href="#/tab/events/{{event.$id}}">

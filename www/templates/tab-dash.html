@@ -12,11 +12,15 @@
       <div class="center">
         <img class="headerimg" src="./img/banner.jpg" />
       </div>
+      <div class="center" ng-if="events.length<=0">
+          <h3 class="light">No active events</h3>
+          <button ng-if="isAuthorised()" class="button button-clear button-balanced" ng-click="goToEvents()">Create Event</button>
+      </div>
       <ion-list ng-repeat="event in events | orderBy: '-date'" ng-init="getEventInfo(event)">
         <ion-item class="item-dark">
           <button class="pull-right button scoresButton" ng-click="showScore(event)">Score</button>
           <h2 class="header">{{event.name}}</h2>
-          <small>{{event.location}} : {{event.date | date:dateFormat}}</small>
+          <p class="dull">{{event.location}} : {{event.date | date:dateFormat}}</p>
           <hr>
           <ion-item class="center item-dark"
                     ng-click="toggleGroup(match)"

@@ -9,14 +9,12 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
   this.getAll = function(){
     return points;
   };
-
-
   this.get = function(pointsId){
     return points.$getRecord(pointsId);
   };
 
   this.set = function(pointsRef, newPoints){
-     firebase.database().ref('points').child(pointsRef).set(newPoints); 
+     firebase.database().ref('points').child(pointsRef).set(newPoints);
   }
 
   this.getByEvent = function(event){
@@ -32,8 +30,6 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
     var def = $q.defer();
     var userPoints = [];
     this.getByEvent(event).then(function(points) {
-      var winnerPoints = 0;
-      var winner = {};
       points.forEach(function (point) {
         Auth.get(point.uid).then(function (userInfo) {
           self.getByReference(point.uid + point.eventId).$loaded().then(function (uPoint) {

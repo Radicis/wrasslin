@@ -1,5 +1,7 @@
 angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestlers, Auth, Points,  $ionicPopup, $stateParams, Events, Matches, $firebaseObject) {
 
+  $scope.show();
+
   // eventID parameter pulled from URI parsing
   var eventId = $stateParams.eventId;
 
@@ -8,8 +10,8 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
       $scope.event = event;
       // gets all the matches for that event
       $scope.eventMatches = Matches.getByEvent(eventId);
-      // Populates the event with the relevant info (in memory)
-
+      // Populates the event object (in memory) with its related matches, votes and points
+        event.userPoints = {};
         Events.getMatches(event).then(function(matches){
           event.matches = matches;
           angular.forEach(event.matches, function(match){
@@ -18,19 +20,24 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
             });
           });
         });
-        Points.getByEvent(event).then(function(points){
-          event.userPoints = [];
-          points.forEach(function(point){
-            Auth.get(point.uid).then(function(userInfo){
-              Points.getByReference(point.uid + point.eventId).$loaded().then(function(uPoint){
-                event.userPoints.push({uid: uPoint.uid, name: userInfo[0].name, points: uPoint.points});
-              });
-            });
-          });
+        Points.getEventPoints(event).then(function(points){
+          event.userPoints = points;
         });
-
+        $scope.hide();
   });
-    
+
+  // Displays the current event score in a modal
+  $scope.showScore = function(event){
+    var myPopup = $ionicPopup.show({
+      templateUrl: 'templates/modals/showScore.html',
+      title: 'Scores',
+      scope: $scope,
+      buttons: [
+        { text: 'Close' }
+      ]
+    });
+  };
+
   // gets all of the wresters in the firebase to populate the add match dropdowns
   $scope.wrestlers = Wrestlers.getAll();
 
@@ -47,21 +54,43 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
   $scope.eventComplete = function(event){
     var winner = null;
     Points.getEventPoints(event).then(function(points){
-      console.log(points)
-      console.log(points[0]);
+     console.log(points);
       points.sort(comparePoints);
-      winner = points[0].name;
+      var winningPoints = [];
+      // Check for a tie
+      points.forEach(function(point){
+        if(point.points==points[0].points){
+            winningPoints.push(point);
+        }
+      });
+      if(winningPoints.length>1){
+          $scope.winner = {};
+          var myPopup = $ionicPopup.show({
+            templateUrl: 'templates/modals/tieBreaker.html',
+            title: 'Tie Breaker!',
+            scope: $scope,
+            buttons: [
+              { text: 'Cancel' },
+              {
+                text: '<b>Save</b>',
+                type: 'button-balaned',
+                onTap: function(e) {
+                  if (!$scope.winner.name) {
+                    alert("Try again");
+                    e.preventDefault();
+                  } else {
+                    winner = $scope.winner.name;
+                    myPopup.close();
+                  }
+                }
+              }
+            ]
+          });
+      }
+      else{
+          winner = points[0].name;
+      }
     });
-
-      // get max of userPoints
-      // event.userPoints.forEach(function(points){
-      //   if(points.points>winnerPoints){
-      //     winner.name = points.name,
-      //     winner.points = points.points
-      //   }
-      //   // account for tie
-      // });
-    // });
 
     if(winner) {
       firebase.database().ref('events').child(event.$id).set({
@@ -79,7 +108,7 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
   $scope.addMatch = function(){
 
     $scope.newMatch = {};
-    $scope.matchTypes = ['Single', 'Tag-Team'];
+    $scope.matchTypes = ['Single', 'Tag-Team', 'Rumble', 'Custom'];
     $scope.selectedMatchtype;
 
     var myPopup = $ionicPopup.show({

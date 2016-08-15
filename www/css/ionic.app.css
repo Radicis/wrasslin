@@ -1,20 +1,4 @@
 @charset "UTF-8";
-/*
-To customize the look and feel of Ionic, you can override the variables
-in ionic's _variables.scss file.
-
-For example, you might change some of the default colors:
-
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
-$positive:                        #387ef5 !default;
-$calm:                            #11c1f3 !default;
-$balanced:                        #33cd5f !default;
-$energized:                       #ffc900 !default;
-$assertive:                       #ef473a !default;
-$royal:                           #886aea !default;
-$dark:                            #444 !default;
-*/
 /*!
   Ionicons, v2.0.1
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
@@ -9822,6 +9806,19 @@ html, .pane, .view {
 .center {
   text-align: center; }
 
+.scroll-content {
+  background-color: #222;
+  padding: 0; }
+
+.pull-right {
+  float: right; }
+
+h2 {
+  color: #ccc; }
+
+.dull {
+  color: #aaa !important; }
+
 .item-icon-left ion-spinner {
   float: left;
   margin-left: -3.2em;
@@ -9833,13 +9830,6 @@ html, .pane, .view {
   stroke: #999;
   fill: #999; }
 
-.scroll-content {
-  background-color: #222;
-  padding: 0; }
-
-.pull-right {
-  float: right; }
-
 .scoresButton {
   padding: 2px;
   min-height: 0;
@@ -9850,9 +9840,6 @@ html, .pane, .view {
   background-color: #222;
   color: #ccc; }
 
-h2 {
-  color: #ccc; }
-
 .button.button-balanced, .bar.bar-balanced.title {
   border-color: transparent;
   background-color: #33cd5f;
@@ -9861,9 +9848,6 @@ h2 {
 .item.item-dark {
   color: #ccc;
   border: 1px solid #222;
-  transition: 0.2s all linear; }
-
-.list {
   transition: 0.2s all linear; }
 
 .fade-in {
@@ -9886,7 +9870,7 @@ h2 {
   transition: all ease-in-out 250ms; }
 
 .item p {
-  color: #ccc; }
+  color: #aaa; }
 
 .dark {
   background-color: #222;
@@ -9911,6 +9895,9 @@ h2 {
 
 .lessPadding {
   padding: 5px !important; }
+
+.noPadding {
+  padding: 0; }
 
 .header {
   font-size: 1.75em !important; }
