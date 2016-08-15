@@ -2,19 +2,36 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
 
   var ref = firebase.database().ref();
   var eventsRef = firebase.database().ref().child("events/");
-  var events = $firebaseArray(eventsRef);
 
   this.getAll = function(){
-    return events;
+      var def = $q.defer();
+      var events = $firebaseArray(eventsRef);
+      events.$loaded().then(function(snap){
+          def.resolve(snap);
+      })
+      return def.promise;
   };
 
   this.getActive = function(){
+    var def = $q.defer();
     var activeEvents = $firebaseArray(eventsRef.orderByChild("active").equalTo(true));
-    return activeEvents;
+    activeEvents.$loaded().then(function(snap){
+        def.resolve(snap);
+    })
+    return def.promise;
   };
 
   this.get = function(eventId){
-    return events.$getRecord(eventId);
+    var def = $q.defer();
+    var events = $firebaseArray(eventsRef);
+    events.$loaded().then(function(snap){
+        def.resolve(snap.$getRecord(eventId));
+    })
+    return def.promise;
+  };
+
+  this.createEvent = function (newEvent) {
+    eventsRef.push(newEvent);
   };
 
   this.getMatches = function(event){

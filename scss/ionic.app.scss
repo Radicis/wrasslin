@@ -45,6 +45,20 @@ html, .pane, .view {
   text-align:center;
 }
 
+.item-icon-left ion-spinner {
+  float: left;
+  margin-left: -3.2em;
+  margin-right: 1em;
+ }
+
+
+.spinner svg {
+  width: 30px;
+  height: 30px;
+  stroke: #999;
+  fill: #999;
+}
+
 .scroll-content{
   background-color:$dark;
   padding:0;
@@ -76,7 +90,6 @@ h2{
 }
 
 .item.item-dark{
-  background-color:$grim;
   color:$stable;
   border:1px solid $dark;
   transition: 0.2s all linear;
@@ -177,9 +190,3 @@ h2{
   display: block !important;
   transition: 0.2s all linear;
 }
-
-
-
-
-
-

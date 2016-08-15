@@ -15,6 +15,10 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
     return points.$getRecord(pointsId);
   };
 
+  this.set = function(pointsRef, newPoints){
+     firebase.database().ref('points').child(pointsRef).set(newPoints); 
+  }
+
   this.getByEvent = function(event){
     var def = $q.defer();
     var eventPoints = $firebaseArray(pointsRef.orderByChild("eventId").equalTo(event.$id));

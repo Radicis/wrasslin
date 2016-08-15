@@ -1,13 +1,21 @@
 angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers,$ionicPopup, $firebaseAuth) {
 
-  $scope.single = Wrestlers.getAllSingle();
+  // Gets all of the westers in the single category
+  Wrestlers.getAllSingle().then(function(wrestlers){
+      $scope.show();
+      $scope.single = wrestlers;
+      // Gets all of the tags teams
+      Wrestlers.getAllTag().then(function(tags){
+          $scope.tag = tags;
+          $scope.hide();
+      });
+  });
 
-  $scope.tag = Wrestlers.getAllTag();
-
+  // displays a confirmation to the user and dletes the wrestler is confirmed
   $scope.delete = function(wrestler){
     $scope.check = {};
     var myPopup = $ionicPopup.show({
-      templateUrl: 'templates/confirmDelete.html',
+      templateUrl: 'templates/modals/confirmDelete.html',
       title: 'Enter Name',
       scope: $scope,
       buttons: [
@@ -28,11 +36,12 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
     });
   }
 
+  // Adds a new wrestler to the firebase and tries to pull the image from wiki
   $scope.addWrestler = function(){
     $scope.newWrestler = {};
 
     var myPopup = $ionicPopup.show({
-      templateUrl: 'templates/addWrestler.html',
+      templateUrl: 'templates/modals/addWrestler.html',
       title: 'Enter Name',
       scope: $scope,
       buttons: [
@@ -61,15 +70,15 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
           var imgsrc = pages[pageId];
           img = imgsrc.thumbnail.source;
         }catch(err){img = null}
-        firebase.database().ref('wrestlers/').push({
+        var wrestler = {
           isTeam: $scope.newWrestler.isTeam,
           name:  $scope.newWrestler.name.split('(')[0],
           active: true,
           pic: img
-        });
+        }
+        Wrestlers.add(wrestler);
         console.log('Created!', $scope.newWrestler.name);
       });
     });
   };
-
 });

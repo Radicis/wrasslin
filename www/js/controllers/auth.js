@@ -1,4 +1,29 @@
-angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPopup, $ionicPopover){
+angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPopup,$ionicLoading){
+
+    var loadingText = [
+        "Making Cena win",
+        "Cheering for Ziggler",
+        "Getting in trouble",
+        "Squaring circles",
+        "Cocking Fist",
+        "Eating Booty Os",
+        "Certifying Gs"
+    ];
+
+    $scope.show = function() {
+        var index = Math.floor(Math.random() * (loadingText.length - 0)) + 0;
+        $ionicLoading.show({
+          duration: 30000,
+          noBackdrop: true,
+          template: '<p class="item-icon-left">'+loadingText[index]+'<ion-spinner icon="lines"/></p>'
+        }).then(function(){
+        });
+  };
+
+  $scope.hide = function(){
+    $ionicLoading.hide().then(function(){
+    });
+  };
 
   var provider = new firebase.auth.GoogleAuthProvider();
 
@@ -12,24 +37,30 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
 
   firebase.initializeApp(config);
 
+  // Determines if the user is logged in
   $scope.isAuthorised = function(){
     return Auth.isAuthorised();
   };
 
+  // Logs in the user
   $scope.login = function() {
     console.log("Trying to log in");
     Auth.login();
   };
 
+  // Determines if the logged in user is the creator(owner) of the specified event
   $scope.isCreator = function(event){
     return Auth.isCreator(event);
   };
 
+  // Listens for auth state changes
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       console.log("Signed in with: " + user.uid);
+      // Set the authorised flag
       Auth.authorise(true);
       user.providerData.forEach(function (profile) {
+        // Create the custom user info record to asssociate this user with name/image
         Auth.setUserInfo(user.uid, profile);
       });
       //$route.reload();
@@ -40,12 +71,11 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
     }
   });
 
+  // NYI email password login
   $scope.createUser = function() {
-
     $scope.user = {};
-
     var myPopup = $ionicPopup.show({
-      templateUrl: 'templates/signup.html',
+      templateUrl: 'templates/modals/signup.html',
       title: 'Enter Account Details',
       scope: $scope,
       buttons: [
@@ -57,17 +87,16 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
             if (!$scope.user.email || !$scope.user.password) {
               e.preventDefault();
             } else {
+              Auth.createAccount($scope.user.email, $scope.user.password);
               myPopup.close();
             }
           }
         }
       ]
     });
-    myPopup.then(function(res) {
-      Auth.createAccount($scope.user.email, $scope.user.password);
-    });
   };
 
+  // Signs out the user
   $scope.logout = function(){
     Auth.signOut();
   };

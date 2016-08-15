@@ -1,13 +1,26 @@
 angular.module('starter').controller('EventCtrl', function($scope, Auth, $ionicPopup, $timeout, $firebaseArray, Events, $firebaseAuth) {
 
-  $scope.events = Events.getAll();
+  // gets all of the events in firebase
+  $scope.show();
+  Events.getAll().then(function(events){
+      $scope.events = events;
+      $scope.hide();
+  })
 
-  var eventsRef = firebase.database().ref().child("events/");
+  $scope.doRefresh = function() {
+      $scope.show();
+      Events.getAll().then(function(events){
+          $scope.events = events;
+          $scope.$broadcast('scroll.refreshComplete');
+          $scope.hide();
+      });
+  };
 
+  // Creates a new event
   $scope.addEvent = function(){
     $scope.newEvent = {};
     var myPopup = $ionicPopup.show({
-      templateUrl: 'templates/addEvent.html',
+      templateUrl: 'templates/modals/addEvent.html',
       title: 'Enter Event Details',
       scope: $scope,
       buttons: [
@@ -16,26 +29,33 @@ angular.module('starter').controller('EventCtrl', function($scope, Auth, $ionicP
           text: '<b>Create</b>',
           type: 'button-balanced',
           onTap: function(e) {
-            if (!$scope.newEvent.name) {
+            if (!$scope.newEvent.name || !$scope.newEvent.location) {
               e.preventDefault();
             } else {
+              var uid = firebase.auth().currentUser.uid;
+              var date = new Date().toISOString();
+              var newEvent = {
+                  name: $scope.newEvent.name,
+                  location: $scope.newEvent.location,
+                  date: date,
+                  active: true,
+                  owner: uid
+              };
+              Events.createEvent(newEvent);
               myPopup.close();
-              return $scope.newEvent.name;
             }
           }
         }
       ]
     });
-    myPopup.then(function(res) {
-      createEvent($scope.newEvent.name, $scope.newEvent.location);
-    });
   };
 
+  // Displays a confirmation to the user and deleted the event is confirmed
   $scope.delete = function(event){
     if(Auth.isCreator(event)) {
       $scope.check = {};
       var myPopup = $ionicPopup.show({
-        templateUrl: 'templates/confirmDelete.html',
+        templateUrl: 'templates/modals/confirmDelete.html',
         title: 'You sure?',
         scope: $scope,
         buttons: [
@@ -55,15 +75,5 @@ angular.module('starter').controller('EventCtrl', function($scope, Auth, $ionicP
         ]
       });
     }
-  };
-
-  var createEvent = function (name, location) {
-    firebase.database().ref('events/').push({
-      name: name,
-      location: location,
-      date: new Date().toISOString(),
-      active: true,
-      owner: firebase.auth().currentUser.uid
-    });
   };
 })

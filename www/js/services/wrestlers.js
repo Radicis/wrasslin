@@ -8,16 +8,23 @@ angular.module('starter').service('Wrestlers', function($q, $http, $firebaseArra
 
 
     this.getAllSingle = function(){
-        var singleref = westerlerRef.orderByChild("isTeam").equalTo(false);
-       var singleWrestlers =  $firebaseArray(singleref);
-       return singleWrestlers;
+        var def = $q.defer();
+        var tagRef = westerlerRef.orderByChild("isTeam").equalTo(false);
+        var tagWrestlers =  $firebaseArray(tagRef);
+        tagWrestlers.$loaded().then(function(snap){
+            def.resolve(snap);
+        })
+        return def.promise;
     };
 
     this.getAllTag = function(){
+       var def = $q.defer();
        var tagRef = westerlerRef.orderByChild("isTeam").equalTo(true);
        var tagWrestlers =  $firebaseArray(tagRef);
-
-       return tagWrestlers;
+       tagWrestlers.$loaded().then(function(snap){
+           def.resolve(snap);
+       })
+       return def.promise;
     };
 
     this.getById = function(id){
@@ -29,12 +36,12 @@ angular.module('starter').service('Wrestlers', function($q, $http, $firebaseArra
       return def.promise;
     };
 
+    this.add = function(wrestler){
+        westerlerRef.push(wrestler);
+    }
+
     this.delete = function(wrestler){
-      var wrestlers = westerlerRef.child(wrestler.$id).remove();
-      // wrestlers.$loaded().then(function(){
-      //     wrestlers.$remove(wrestler);
-      //     wrestlers.$save();
-      // });
+      westerlerRef.child(wrestler.$id).remove();
       };
 
     this.getWikiInfo = function(name){

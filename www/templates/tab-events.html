@@ -4,7 +4,8 @@
       Add New
     </button>
   </ion-nav-buttons>
-  <ion-content>
+  <ion-content delegate-handle="scrollArea">
+    <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
     <div class="center">
       <img class="headerimg" src="./img/banner.jpg" />
     </div>

@@ -104,7 +104,6 @@ angular.module('starter').service("Auth", function($q, $firebaseAuth, $cordovaOa
         return false
       });
     }
-
   };
 
   this.createAccount = function(email, password){

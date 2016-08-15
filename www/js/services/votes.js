@@ -25,6 +25,10 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
     return def.promise;
   };
 
+  this.add = function(vote){
+      firebase.database().ref('votes/').push(vote);
+  }
+
   this.hasUserVoted = function(votes, uid){
     var dupe = false;
     if(votes){

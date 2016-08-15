@@ -1,33 +1,40 @@
-angular.module('starter').controller('EventDetailCtrl', function($scope, Auth, Points,  $ionicPopup, $stateParams, Events, Matches, $firebaseObject) {
+angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestlers, Auth, Points,  $ionicPopup, $stateParams, Events, Matches, $firebaseObject) {
 
-  var ref = firebase.database().ref();
+  // eventID parameter pulled from URI parsing
   var eventId = $stateParams.eventId;
 
-  $scope.event = Events.get(eventId);
-  $scope.eventMatches = Matches.getByEvent(eventId);
-  $scope.wrestlers = $firebaseObject(ref.child('wrestlers').orderByChild("name"));
+  // gets the specified event if from firebase
+  Events.get(eventId).then(function(event){
+      $scope.event = event;
+      // gets all the matches for that event
+      $scope.eventMatches = Matches.getByEvent(eventId);
+      // Populates the event with the relevant info (in memory)
 
-  $scope.getEventInfo = function(event){
-    Events.getMatches(event).then(function(matches){
-      event.matches = matches;
-      angular.forEach(event.matches, function(match){
-        Matches.getVotes(match).then(function(votes){
-          match.votes = votes;
-        });
-      });
-    });
-    Points.getByEvent(event).then(function(points){
-      event.userPoints = [];
-      points.forEach(function(point){
-        Auth.get(point.uid).then(function(userInfo){
-          Points.getByReference(point.uid + point.eventId).$loaded().then(function(uPoint){
-            event.userPoints.push({uid: uPoint.uid, name: userInfo[0].name, points: uPoint.points});
+        Events.getMatches(event).then(function(matches){
+          event.matches = matches;
+          angular.forEach(event.matches, function(match){
+            Matches.getVotes(match).then(function(votes){
+              match.votes = votes;
+            });
           });
         });
-      });
-    });
-  };
+        Points.getByEvent(event).then(function(points){
+          event.userPoints = [];
+          points.forEach(function(point){
+            Auth.get(point.uid).then(function(userInfo){
+              Points.getByReference(point.uid + point.eventId).$loaded().then(function(uPoint){
+                event.userPoints.push({uid: uPoint.uid, name: userInfo[0].name, points: uPoint.points});
+              });
+            });
+          });
+        });
 
+  });
+    
+  // gets all of the wresters in the firebase to populate the add match dropdowns
+  $scope.wrestlers = Wrestlers.getAll();
+
+  // compares 2 objects based on their points property
   var comparePoints = function(a,b) {
     if (a.points < b.points)
       return -1;
@@ -36,10 +43,9 @@ angular.module('starter').controller('EventDetailCtrl', function($scope, Auth, P
     return 0;
   };
 
+  // Completes the event, calculates winner, sets active to false
   $scope.eventComplete = function(event){
-
     var winner = null;
-
     Points.getEventPoints(event).then(function(points){
       console.log(points)
       console.log(points[0]);
@@ -69,6 +75,7 @@ angular.module('starter').controller('EventDetailCtrl', function($scope, Auth, P
     }
   };
 
+  // Adds a match to the event
   $scope.addMatch = function(){
 
     $scope.newMatch = {};
@@ -76,7 +83,7 @@ angular.module('starter').controller('EventDetailCtrl', function($scope, Auth, P
     $scope.selectedMatchtype;
 
     var myPopup = $ionicPopup.show({
-      templateUrl: 'templates/addMatch.html',
+      templateUrl: 'templates/modals/addMatch.html',
       title: 'Enter Match Details',
       scope: $scope,
       buttons: [
@@ -89,31 +96,18 @@ angular.module('starter').controller('EventDetailCtrl', function($scope, Auth, P
               alert("Try again");
               e.preventDefault();
             } else {
+              Matches.createMatch($stateParams.eventId, $scope.selectedMatchtype, $scope.newMatch.p1.name, $scope.newMatch.p2.name);
+              console.log('Created!');
               myPopup.close();
             }
           }
         }
       ]
     });
-    myPopup.then(function(res) {
-      createMatch($stateParams.eventId, $scope.selectedMatchtype, $scope.newMatch.p1.name, $scope.newMatch.p2.name);
-      console.log('Created!');
-    });
   };
 
+  // Swaps from single ot tag team
   $scope.matchTypeChanged = function(matchType){
     $scope.selectedMatchtype = matchType;
   };
-
-  var createMatch = function (eventId, type, p1, p2) {
-    firebase.database().ref('matches/').push({
-      eventId: eventId,
-      type: type,
-      p1: p1,
-      p2: p2,
-      date: new Date().toISOString(),
-      active: true
-    });
-  };
-
 })
