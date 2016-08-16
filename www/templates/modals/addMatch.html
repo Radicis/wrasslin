@@ -37,8 +37,8 @@
     <div class="input-label">
       &nbsp;
     </div>
-    <select>
-      <option ng-repeat="team in tag-teams">{{team.name}}</option>
+    <select ng-options="item as item.name for item in teams"
+            ng-model="newMatch.p1">
     </select>
   </label>
   <p class="center padding">Vs</p>
@@ -46,30 +46,8 @@
     <div class="input-label">
       &nbsp;
     </div>
-    <select>
-      <option ng-repeat="team in tag-teams">{{team.name}}</option>
-    </select>
-  </label>
-</div>
-
-<div class="list" ng-show="selectedMatchtype == matchTypes[2]">
-  <label class="item item-input item-select">
-    <div class="input-label">
-      &nbsp;
-    </div>
-    <select ng-options="item as item.name for item in wrestlers"
-            ng-model="newMatch.p1">
-    </select>
-  </label>
-</div>
-
-<div class="list" ng-show="selectedMatchtype == matchTypes[3]">
-  <label class="item item-input item-select">
-    <div class="input-label">
-      &nbsp;
-    </div>
-    <select ng-options="item as item.name for item in wrestlers"
-            ng-model="newMatch.p1">
+    <select ng-options="item as item.name for item in teams"
+            ng-model="newMatch.p2">
     </select>
   </label>
 </div>

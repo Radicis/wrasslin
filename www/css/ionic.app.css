@@ -9816,6 +9816,9 @@ p.wrap {
 .pull-right {
   float: right; }
 
+.bottomMargin {
+  margin-bottom: 20px; }
+
 h2 {
   color: #ccc; }
 

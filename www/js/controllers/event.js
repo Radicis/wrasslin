@@ -20,7 +20,7 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
             });
           });
         });
-        Points.getEventPoints(event).then(function(points){
+        Points.getByEvent(event).then(function(points){
           event.userPoints = points;
         });
         $scope.hide();
@@ -38,33 +38,30 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
     });
   };
 
-  // gets all of the wresters in the firebase to populate the add match dropdowns
-  $scope.wrestlers = Wrestlers.getAll();
-
   // compares 2 objects based on their points property
   var comparePoints = function(a,b) {
-    if (a.points < b.points)
-      return -1;
-    if (a.last_nom > b.last_nom)
-      return 1;
-    return 0;
+    return (a.points - b.points)
   };
 
   // Completes the event, calculates winner, sets active to false
   $scope.eventComplete = function(event){
     var winner = null;
-    Points.getEventPoints(event).then(function(points){
-     console.log(points);
-     points.sort(comparePoints);
-     console.log(points);
-     var winningPoints = [];
-      // Check for a tie
-      points.map(function(point){
-          console.log(point);
-        if(point.points==points[0].points){
-            winningPoints.push(point);
-        }
-      });
+    var points = event.userPoints;
+
+    points.sort(comparePoints);
+
+    winner = points[0].name;
+
+    // Points.getEventPoints(event).then(function(points){
+    //  points.sort(comparePoints);
+    //  var winningPoints = [];
+    //   // Check for a tie
+    //   points.map(function(point){
+    //     console.log(point);
+    //     if(point.points==points[0].points){
+    //         winningPoints.push(point);
+    //     }
+    //   });
     //   if(winningPoints.length>1){
     //       $scope.winner = {};
     //       var myPopup = $ionicPopup.show({
@@ -92,25 +89,27 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
     //   else{
     //       winner = points[0].name;
     //   }
-    });
+    // });
 
     if(winner) {
-      firebase.database().ref('events').child(event.$id).set({
-        name: event.name,
-        location: event.location,
-        date: event.date,
-        active: false,
-        owner: event.owner,
-        winner: winner
-      });
+      firebase.database().ref('events').child(event.$id).child("winner").set(winner);
+      firebase.database().ref('events').child(event.$id).child("active").set(false);
     }
   };
+
+  // gets all of the wresters in the firebase to populate the add match dropdowns
+  Wrestlers.getAllSingle().then(function(wrestlers){
+      $scope.wrestlers = wrestlers;
+  })
+  Wrestlers.getAllTag().then(function(wrestlers){
+      $scope.teams = wrestlers;
+  })
 
   // Adds a match to the event
   $scope.addMatch = function(){
 
     $scope.newMatch = {};
-    $scope.matchTypes = ['Single', 'Tag-Team', 'Rumble', 'Custom'];
+    $scope.matchTypes = ['Single', 'Tag-Team'];
     $scope.selectedMatchtype;
 
     var myPopup = $ionicPopup.show({

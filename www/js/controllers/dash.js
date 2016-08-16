@@ -5,16 +5,13 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
   Events.getActive().then(function(events){
       $scope.events = events;
       $scope.hide();
-      console.log(events);
   })
 
   // Refreshes the scope in the case where the update is in memory and not in firebase
   $scope.doRefresh = function() {
-      $scope.show();
       Events.getActive().then(function(events){
           $scope.events = events;
           $scope.$broadcast('scroll.refreshComplete');
-          $scope.hide();
       });
   };
 
@@ -34,7 +31,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
         });
       });
     });
-    Points.getEventPoints(event).then(function(points){
+    Points.getByEvent(event).then(function(points){
       event.userPoints = points;
     });
     $scope.hide();
@@ -122,20 +119,24 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
   $scope.assignPoints = function(match, event, winner, points){
     Votes.getByMatch(match.$id).then(function(matchVotes) {
       matchVotes.forEach(function(vote){
-        var pointsRef = vote.uid + event.$id;
         if(vote.vote==winner){
-          Points.getByReference(pointsRef).$loaded().then(function(uPoints){
+          Points.getByReference(event.$id, vote.uid).$loaded().then(function(uPoints){
             if(uPoints.points>0){
               points = uPoints.points + points;
             }
+            var uid = firebase.auth().currentUser.uid;
+            Auth.get(uid).then(function(userInfo){
             var newPoints = {
               uid: vote.uid,
               eventId: event.$id,
               matchId: match.$id,
               points: points,
+              name: userInfo[0].name,
+              img: userInfo[0].photo,
            };
-            Points.set(pointsRef, newPoints);
-          })
+            Points.set(event.$id, vote.uid, newPoints);
+        });
+    });
         }
       });
     });

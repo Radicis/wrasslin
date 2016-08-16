@@ -10,48 +10,29 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
     return points;
   };
 
-
   this.get = function(pointsId){
     return points.$getRecord(pointsId);
   };
 
-  this.set = function(pointsRef, newPoints){
-     firebase.database().ref('points').child(pointsRef).set(newPoints);
+  this.set = function(eventId, pointsRef, newPoints){
+     var eventsRef = firebase.database().ref().child("events").child(eventId).child("points");
+     eventsRef.child(pointsRef).set(newPoints);
   }
 
   this.getByEvent = function(event){
     var def = $q.defer();
-    var eventPoints = $firebaseArray(pointsRef.orderByChild("eventId").equalTo(event.$id));
+    var eventsRef = firebase.database().ref().child("events").child(event.$id).child("points");
+    var eventPoints = $firebaseArray(eventsRef);
     eventPoints.$loaded().then(function(snap){
       def.resolve(snap);
     });
     return def.promise;
   };
 
-  this.getEventPoints = function(event){
-    var def = $q.defer();
-    var userPoints = [];
-    this.getByEvent(event).then(function(points) {
-      points.forEach(function (point) {
-        Auth.get(point.uid).then(function (userInfo) {
-          self.getByReference(point.uid + point.eventId).$loaded().then(function (uPoint) {
-            userPoints.push({
-              uid: uPoint.uid,
-              img: userInfo[0].photo,
-              name: userInfo[0].name,
-              points: uPoint.points
-            });
-          });
-        });
-      });
-      def.resolve(userPoints);
-    });
-    return def.promise;
-  };
-
-  this.getByReference = function(uniqueRef){
-    var pointsRef = firebase.database().ref().child("points");
-    var uPoints = $firebaseObject(pointsRef.child(uniqueRef));
+  this.getByReference = function(eventId, uniqueRef){
+    var eventsRef = firebase.database().ref().child("events").child(eventId).child("points").child(uniqueRef);
+    //var pointsRef = firebase.database().ref().child("points");
+    var uPoints = $firebaseObject(eventsRef);
     return uPoints;
   }
 });

@@ -5,13 +5,15 @@
         <img class="epic" src="{{chat.img}}"/><h3 class="dark">{{chat.name}}  <span class="smaller">{{chat.date | date:'M/d/yyyy HH:mm:ss'}}</span></h3><p class="paddingTop wrap">{{chat.text}}</p>
     </ion-item>
     </ion-list>
-    <ion-item class="item-input-inset item-dark">
-      <label class="item-input-wrapper">
-        <input type="text" ng-model="newChat.text" placeholder="Type..">
-      </label>
-      <button ng-click="chat()" class="button button-small button-balanced">
-        Send
-      </button>
-  </ion-item>
  </ion-content>
+
+ <ion-footer-bar keyboard-attach class="item-input-inset bottomMargin bar-dark" ng-if="isAuthorised()">
+    <label class="item-input-wrapper item-dark">
+      <input type="text" placeholder="Message" ng-model="newChat.text">
+    </label>
+    <button class="button button-balanced" ng-click="chat()">
+      Send
+  </button>
+  </ion-footer-bar>
+
 </ion-view>
