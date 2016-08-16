@@ -3,21 +3,21 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
   // Pull the full list of active events from the Events service
   $scope.show();
   Events.getActive().then(function(events){
-      $scope.events = events;
-      $scope.hide();
+    $scope.events = events;
+    $scope.hide();
   })
 
   // Refreshes the scope in the case where the update is in memory and not in firebase
   $scope.doRefresh = function() {
-      Events.getActive().then(function(events){
-          $scope.events = events;
-          $scope.$broadcast('scroll.refreshComplete');
-      });
+    Events.getActive().then(function(events){
+      $scope.events = events;
+      $scope.$broadcast('scroll.refreshComplete');
+    });
   };
 
   // Directs the user to events page
   $scope.goToEvents = function(){
-      $state.go("tab.events");
+    $state.go("tab.events");
   }
 
   // Populates the event object (in memory) with its related matches, votes and points
@@ -70,7 +70,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
             date: new Date().toISOString(),
             matchId: match.$id,
             eventId: event.$id
-        };
+          };
           Votes.add(newVote)
           $scope.doRefresh();
           return true;
@@ -124,19 +124,19 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
             if(uPoints.points>0){
               points = uPoints.points + points;
             }
-            var uid = firebase.auth().currentUser.uid;
-            Auth.get(uid).then(function(userInfo){
-            var newPoints = {
-              uid: vote.uid,
-              eventId: event.$id,
-              matchId: match.$id,
-              points: points,
-              name: userInfo[0].name,
-              img: userInfo[0].photo,
-           };
-            Points.set(event.$id, vote.uid, newPoints);
-        });
-    });
+              var newPoints = {
+                uid: vote.uid,
+                eventId: event.$id,
+                matchId: match.$id,
+                points: points,
+                name: vote.name,
+                img: vote.img,
+              };
+              console.log(newPoints);
+              Points.set(event.$id, vote.uid, newPoints);
+              $scope.doRefresh();
+
+          });
         }
       });
     });

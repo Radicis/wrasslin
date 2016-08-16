@@ -40,17 +40,27 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
 
   // compares 2 objects based on their points property
   var comparePoints = function(a,b) {
-    return (a.points - b.points)
+    console.log(a);
+
+    console.log("Apoint: " + a.points);
+    console.log(b);
+    console.log("BpointS: " + b.points);
+    if (a.points < b.points)
+      return -1;
+    if (a.points > b.points)
+      return 1;
+    return 0;
   };
 
   // Completes the event, calculates winner, sets active to false
   $scope.eventComplete = function(event){
-    var winner = null;
     var points = event.userPoints;
 
     points.sort(comparePoints);
 
-    winner = points[0].name;
+
+
+    var winner = points[points.length-1].name;
 
     // Points.getEventPoints(event).then(function(points){
     //  points.sort(comparePoints);

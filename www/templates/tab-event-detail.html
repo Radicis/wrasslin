@@ -1,6 +1,6 @@
 <ion-view view-title="{{event.name}}">
     <ion-nav-buttons side="right">
-      <button ng-if="isAuthorised() && match.active" class="button" ng-click="addMatch()">
+      <button ng-if="isCreator(event) && event.active" class="button" ng-click="addMatch()">
         Add Match
       </button>
     </ion-nav-buttons>

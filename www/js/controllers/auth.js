@@ -54,7 +54,9 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
   };
 
   $scope.getUid = function(){
+    if(Auth.isAuthorised()) {
       return firebase.auth().currentUser.uid;
+    }
   }
 
   // Listens for auth state changes
