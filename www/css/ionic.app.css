@@ -9810,6 +9810,9 @@ html, .pane, .view {
   background-color: #222;
   padding: 0; }
 
+p.wrap {
+  white-space: normal; }
+
 .pull-right {
   float: right; }
 
@@ -9817,6 +9820,11 @@ h2 {
   color: #ccc; }
 
 .dull {
+  color: #aaa !important; }
+
+.smaller {
+  font-size: 0.7em;
+  opacity: 0.7;
   color: #aaa !important; }
 
 .item-icon-left ion-spinner {

@@ -55,41 +55,43 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
     var winner = null;
     Points.getEventPoints(event).then(function(points){
      console.log(points);
-      points.sort(comparePoints);
-      var winningPoints = [];
+     points.sort(comparePoints);
+     console.log(points);
+     var winningPoints = [];
       // Check for a tie
-      points.forEach(function(point){
+      points.map(function(point){
+          console.log(point);
         if(point.points==points[0].points){
             winningPoints.push(point);
         }
       });
-      if(winningPoints.length>1){
-          $scope.winner = {};
-          var myPopup = $ionicPopup.show({
-            templateUrl: 'templates/modals/tieBreaker.html',
-            title: 'Tie Breaker!',
-            scope: $scope,
-            buttons: [
-              { text: 'Cancel' },
-              {
-                text: '<b>Save</b>',
-                type: 'button-balaned',
-                onTap: function(e) {
-                  if (!$scope.winner.name) {
-                    alert("Try again");
-                    e.preventDefault();
-                  } else {
-                    winner = $scope.winner.name;
-                    myPopup.close();
-                  }
-                }
-              }
-            ]
-          });
-      }
-      else{
-          winner = points[0].name;
-      }
+    //   if(winningPoints.length>1){
+    //       $scope.winner = {};
+    //       var myPopup = $ionicPopup.show({
+    //         templateUrl: 'templates/modals/tieBreaker.html',
+    //         title: 'Tie Breaker!',
+    //         scope: $scope,
+    //         buttons: [
+    //           { text: 'Cancel' },
+    //           {
+    //             text: '<b>Save</b>',
+    //             type: 'button-balaned',
+    //             onTap: function(e) {
+    //               if (!$scope.winner.name) {
+    //                 alert("Try again");
+    //                 e.preventDefault();
+    //               } else {
+    //                 winner = $scope.winner.name;
+    //                 myPopup.close();
+    //               }
+    //             }
+    //           }
+    //         ]
+    //       });
+    //   }
+    //   else{
+    //       winner = points[0].name;
+    //   }
     });
 
     if(winner) {

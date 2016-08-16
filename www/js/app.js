@@ -57,6 +57,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         }
       })
 
+      .state('tab.chat', {
+        url: '/chat',
+        views: {
+          'tab-chat': {
+            templateUrl: 'templates/tab-chat.html',
+            controller: 'ChatCtrl'
+          }
+        }
+      })
+
       .state('tab.events', {
         url: '/events',
         //   resolve: {

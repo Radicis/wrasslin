@@ -53,6 +53,10 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
     return Auth.isCreator(event);
   };
 
+  $scope.getUid = function(){
+      return firebase.auth().currentUser.uid;
+  }
+
   // Listens for auth state changes
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {

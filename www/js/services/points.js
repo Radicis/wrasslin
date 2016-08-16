@@ -9,6 +9,8 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
   this.getAll = function(){
     return points;
   };
+
+
   this.get = function(pointsId){
     return points.$getRecord(pointsId);
   };

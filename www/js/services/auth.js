@@ -40,7 +40,6 @@ angular.module('starter').service("Auth", function($q, $firebaseAuth, $cordovaOa
     // true if running on native device
     if (window.cordova) {
       $cordovaOauth.facebook("1753255498267207", ["email"]).then(function(result){
-        console.log("Response Object -> " + JSON.stringify(result));
         var credential = firebase.auth.FacebookAuthProvider.credential(
           result.access_token);
 
