@@ -4,7 +4,7 @@
     <img class="headerimg" src="./img/banner.jpg" />
   </div>
     <ion-list>
-        <ion-item ng-repeat="chat in chats | orderBy: 'date'" class="noborder item-dark" ng-class="getUid()==chat.uid ? 'item-avatar-right': 'item-avatar'">
+        <ion-item ng-repeat="chat in chats | orderBy: '-date'" class="noborder item-dark" ng-class="getUid()==chat.uid ? 'item-avatar-right': 'item-avatar'">
         <img class="epic" src="{{chat.img}}"/><h3 class="dark">{{chat.name}}  <span class="smaller">{{chat.date | date:'M/d/yyyy HH:mm:ss'}}</span></h3><p class="paddingTop wrap">{{chat.text}}</p>
     </ion-item>
       <p>&nbsp;&nbsp;&nbsp;</p>

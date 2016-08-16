@@ -33,11 +33,10 @@ angular.module('starter').controller('EventCtrl', function($scope, Auth, $ionicP
               e.preventDefault();
             } else {
               var uid = firebase.auth().currentUser.uid;
-              var date = new Date().toISOString();
               var newEvent = {
                   name: $scope.newEvent.name,
                   location: $scope.newEvent.location,
-                  date: date,
+                  date: firebase.database.ServerValue.TIMESTAMP,
                   active: true,
                   owner: uid
               };

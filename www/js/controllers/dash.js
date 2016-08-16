@@ -67,7 +67,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
             name: username,
             img: userInfo[0].photo,
             vote: wrestler,
-            date: new Date().toISOString(),
+            date: firebase.database.ServerValue.TIMESTAMP,
             matchId: match.$id,
             eventId: event.$id
           };

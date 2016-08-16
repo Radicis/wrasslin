@@ -22,7 +22,7 @@ angular.module('starter').service('Matches', function($q, $firebaseArray, $fireb
         type: type,
         p1: p1,
         p2: p2,
-        date: new Date().toISOString(),
+        date: firebase.database.ServerValue.TIMESTAMP,
         active: true
       });
     };
