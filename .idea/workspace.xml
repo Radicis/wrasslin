@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cb3e8f2a-d089-4131-830c-c6ed465af826" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/chat.js" afterPath="$PROJECT_DIR$/www/js/controllers/chat.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/dash.js" afterPath="$PROJECT_DIR$/www/js/controllers/dash.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/controllers/events.js" afterPath="$PROJECT_DIR$/www/js/controllers/events.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/js/services/matches.js" afterPath="$PROJECT_DIR$/www/js/services/matches.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/templates/tab-chat.html" afterPath="$PROJECT_DIR$/www/templates/tab-chat.html" />
     </list>
     <ignored path="wrasslin.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="dash.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="dash.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/www/js/controllers/dash.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1173">
-              <caret line="69" column="57" selection-start-line="69" selection-start-column="57" selection-end-line="69" selection-end-column="57" />
+            <state relative-caret-position="595">
+              <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -109,7 +105,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wrestlers.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="wrestlers.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/js/controllers/wrestlers.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-430">
@@ -194,8 +190,8 @@
         <option value="$PROJECT_DIR$/www/js/controllers/chat.js" />
         <option value="$PROJECT_DIR$/www/templates/tab-chat.html" />
         <option value="$PROJECT_DIR$/www/js/services/matches.js" />
-        <option value="$PROJECT_DIR$/www/js/controllers/dash.js" />
         <option value="$PROJECT_DIR$/www/js/controllers/events.js" />
+        <option value="$PROJECT_DIR$/www/js/controllers/dash.js" />
       </list>
     </option>
   </component>
@@ -500,15 +496,15 @@
       <workItem from="1471016695034" duration="14720000" />
       <workItem from="1471079479763" duration="24508000" />
       <workItem from="1471371711943" duration="3229000" />
-      <workItem from="1471376969672" duration="524000" />
+      <workItem from="1471376969672" duration="4031000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="100861000" />
+    <option name="totallyTimeSpent" value="104368000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="7" y="45" width="1501" height="1000" extended-state="1" />
+    <frame x="7" y="45" width="1501" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -810,22 +806,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/js/controllers/auth.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1598">
-          <caret line="94" column="5" selection-start-line="94" selection-start-column="5" selection-end-line="94" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/js/controllers/dash.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
-          <caret line="69" column="57" selection-start-line="69" selection-start-column="57" selection-end-line="69" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/www/js/controllers/event.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1039">
@@ -846,6 +826,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-430">
           <caret line="14" column="37" selection-start-line="14" selection-start-column="37" selection-end-line="14" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/controllers/auth.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1598">
+          <caret line="94" column="5" selection-start-line="94" selection-start-column="5" selection-end-line="94" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/js/controllers/dash.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
           <folding />
         </state>
       </provider>

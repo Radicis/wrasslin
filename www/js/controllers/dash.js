@@ -105,7 +105,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
             } else {
               console.log("Match won by:" + $scope.winner.name);
               Matches.setWinner(match, $scope.winner.name);
-              $scope.assignPoints(match, event, $scope.winner.name, 1);
+              $scope.assignPoints(match, event, $scope.winner.name);
               $scope.doRefresh();
               myPopup.close();
             }
@@ -122,7 +122,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
         if(vote.vote==winner){
           Points.getByReference(event.$id, vote.uid).$loaded().then(function(uPoints){
             if(uPoints.points>0){
-              points = uPoints.points + points;
+              points = uPoints.points + 1;
             }
               var newPoints = {
                 uid: vote.uid,
@@ -132,7 +132,6 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
                 name: vote.name,
                 img: vote.img,
               };
-              console.log(newPoints);
               Points.set(event.$id, vote.uid, newPoints);
               $scope.doRefresh();
 
