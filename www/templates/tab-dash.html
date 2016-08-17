@@ -8,7 +8,6 @@
     </button>
   </ion-nav-buttons>
   <ion-content delegate-handle="scrollArea">
-    <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
       <div class="center">
         <img class="headerimg" src="./img/banner.jpg" />
       </div>
@@ -24,27 +23,13 @@
           <hr>
           <ion-item class="center item-dark"
                     ng-click="toggleGroup(match)"
-                    class="padding center" ng-repeat="match in activeEvent.matches | orderBy: '-date'" type="item-text-wrap" >
-            <div ng-class="{activeGroup: isGroupShown(match)}">
-              <h2 class="title lessPadding center">
-                <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
-              <button ng-if="match.active && isCreator(activeEvent)" class="button button-balanced" ng-click="setWinner(match, activeEvent)">Set Winner</button>
-              <p ng-if="match.votes.length>0">Votes: {{match.votes.length}}</p>
-              <ion-list ng-if="!match.active || hasUserVoted(match)">
-                <ion-item ng-repeat="vote in match.votes" class="item-accordion center item-avatar noborder item-dark" ng-show="isGroupShown(match)">
-                  <img class="epic" src="{{vote.img}}" /><p class="padding-top"><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p>
+                    class="padding center" ng-repeat="match in activeEvent.matches" type="item-text-wrap">
+                    <match thisMatch=match></match>
+                <ion-item ng-repeat="vote in match.votes" class="item-accordion center item-avatar noborder item-dark" ng-show="isGroupShown(match)" ng-init="getVoteInfo(vote)">
+                 <p>{{vote.uid}}</p>
                 </ion-item>
               </ion-list>
-              <div ng-if="match.active && isAuthorised() && !hasUserVoted(match)">
-                <button class="button button-block button-balanced" ng-click="vote(activeEvent, match, match.p1)">
-                  {{match.p1}}
-                </button>
-                VS
-                <button class="button button-block button-balanced" ng-click="vote(activeEvent, match, match.p2)">
-                  {{match.p2}}
-                </button>
-              </div>
-            </div>
+
           </ion-item>
         </ion-item>
       </div>

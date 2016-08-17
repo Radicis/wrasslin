@@ -19,24 +19,21 @@ angular.module('starter').service('Matches', function($q, Votes, $firebaseArray,
 };
 
     this.createMatch = function (eventId, type, p1, p2) {
-      matchesRef.push({
+    var newKey = matchesRef.push({
         eventId: eventId,
         type: type,
         p1: p1,
         p2: p2,
         date: firebase.database.ServerValue.TIMESTAMP,
         active: true
-      });
-    };
+    }).key;
 
-  this.getVotes = function(match){
-    var def = $q.defer();
-    var votes = $firebaseArray(ref.child('votes').orderByChild("matchId").equalTo(match.$id));
-    votes.$loaded().then(function(snap){
-      def.resolve(snap);
-    });
-    return def.promise;
-  };
+      ref.child("events").child(eventId).child("matches").push(
+          {
+            matchId: newKey
+          }
+      );
+    };
 
   this.hasuserVoted = function(match, uid){
     var voted = false;
@@ -54,14 +51,6 @@ angular.module('starter').service('Matches', function($q, Votes, $firebaseArray,
       matchRef.update({winner: name, active: false});
   }
 
-  this.getByEvent = function(eventId){
-    var def = $q.defer();
-    var eventMatches = $firebaseArray(matchesRef.orderByChild("eventId").equalTo(eventId));
-    eventMatches.$loaded().then(function(snap){
-      def.resolve(snap);
-    })
-    return def.promise;
-  }
 
   this.delete = function(match){
     matchesRef.child(match.$id).remove();

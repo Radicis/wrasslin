@@ -9,31 +9,26 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
     return votes;
   };
 
-  this.getByMatch = function(matchId){
-    var def = $q.defer();
-    var matchVotes = $firebaseArray(votesRef.orderByChild("matchId").equalTo(matchId));
-    matchVotes.$loaded().then(function(snap){
-      def.resolve(snap);
-    });
-    return def.promise;
-  };
+  this.get = function(voteId){
+    return votes.$getRecord(voteId);
+};
 
-  this.getByEvent = function(eventId){
-    var def = $q.defer();
-    var eventVotes = $firebaseArray(votesRef.orderByChild("eventId").equalTo(eventId));
-    eventVotes.$loaded().then(function(snap){
-      def.resolve(snap);
-    });
-    return def.promise;
-  };
+
 
   this.add = function(vote){
-      firebase.database().ref('votes/').push(vote);
+      var newKey = firebase.database().ref('votes/').push(vote).key;
+
+        firebase.database().ref().child("matches").child(vote.matchId).child("votes/" + newKey).set(
+            {
+              uid: vote.uid
+            }
+        );
   }
 
   this.hasUserVoted = function(votes, uid){
     var dupe = false;
     if(votes){
+        console.log(votes[0]);
       votes.forEach(function(vote){
         if(vote.uid==uid){
           dupe = true;

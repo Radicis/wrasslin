@@ -9819,6 +9819,13 @@ p.wrap {
 .bottomMargin {
   margin-bottom: 20px; }
 
+.bold {
+  font-weight: bold; }
+
+.cf {
+  clear: both !important;
+  min-height: 60px; }
+
 h2 {
   color: #ccc; }
 

@@ -1,4 +1,4 @@
-angular.module('starter').controller('DashCtrl', function($scope, $window,$ionicModal,$ionicLoading, $state, Points, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
+angular.module('starter').controller('DashCtrl', function($scope, $window, $ionicModal, $ionicLoading, $state, Points, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
 
   // Pull the full list of active events from the Events service
   $scope.show();
@@ -9,12 +9,10 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
           console.log("No Event found. Showing last active");
           Events.getLastActive().then(function(lastActive){
               $scope.lastActiveEvent = lastActive;
-              $scope.getEventInfo($scope.lastActiveEvent);
           });
       }
       else{
           $scope.activeEvent = events[0];
-          $scope.getEventInfo($scope.activeEvent);
       }
     $scope.hide();
 });
@@ -28,33 +26,22 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
     var matchRef = ref.child("matches");
     matchRef.on('child_added', function(data){
         $scope.notify = $scope.notify+1;
-        $scope.doRefresh();
+        //$scope.doRefresh();
     });
     var votesRef = ref.child("votes");
     votesRef.on('child_added', function(data){
-        $scope.doRefresh();
+        //$scope.doRefresh();
     });
 
-    $scope.doRefresh = function(){
-      $scope.lastActiveEvent = null;
-      $scope.activeEvent = null;
-      $scope.show();
-      Events.getRecentActive().then(function(events){
-          if(!events[0]){
-              console.log("No Event found. Showing last active");
-              Events.getLastActive().then(function(lastActive){
-                  $scope.lastActiveEvent = lastActive;
-                  $scope.getEventInfo($scope.lastActiveEvent);
-                  $scope.$broadcast('scroll.refreshComplete');
-              });
-          }
-          else{
-              $scope.activeEvent = events[0];
-              $scope.getEventInfo($scope.activeEvent);
-              $scope.$broadcast('scroll.refreshComplete');
-          }
-        $scope.hide();
-        });
+
+    $scope.getMatchInfo = function(match){
+        console.log(match);
+        match = Matches.get(match.matchId);
+        console.log(match);
+    }
+
+    $scope.getVoteInfo = function(vote){
+        vote = Votes.get(votes.$id);
     }
 
   // Directs the user to events page
@@ -62,22 +49,6 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
     $state.go("tab.events");
   }
 
-  // Populates the event object (in memory) with its related matches, votes and points
-  $scope.getEventInfo = function(eventObj){
-    eventObj.userPoints = {};
-    Events.getMatches(eventObj).then(function(matches){
-      eventObj.matches = matches;
-      angular.forEach(eventObj.matches, function(match){
-        Matches.getVotes(match).then(function(votes){
-          match.votes = votes;
-        });
-      });
-    });
-    Points.getByEvent(eventObj).then(function(points){
-      eventObj.userPoints = points;
-    });
-    $scope.hide();
-  };
 
   // Displays the current event score in a modal
   $scope.showScore = function(eventObj){
