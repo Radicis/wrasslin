@@ -1,8 +1,10 @@
-angular.module('starter').service('Matches', function($q, $firebaseArray, $firebaseObject) {
+angular.module('starter').service('Matches', function($q, Votes, $firebaseArray, $firebaseObject) {
 
   var ref = firebase.database().ref();
   var matchesRef = firebase.database().ref().child("matches/");
   var matches = $firebaseArray(matchesRef);
+
+  var self = this;
 
   this.getAll = function(){
     return matches;
@@ -60,4 +62,19 @@ angular.module('starter').service('Matches', function($q, $firebaseArray, $fireb
     })
     return def.promise;
   }
+
+  this.delete = function(match){
+    matchesRef.child(match.$id).remove();
+    Votes.deleteByMatch(match);
+  };
+
+  this.deleteByEvent = function(event){
+      var eventMatches = $firebaseArray(matchesRef.orderByChild("eventId").equalTo(event.$id));
+      eventMatches.$loaded().then(function(matches){
+        eventMatches.forEach(function(match){
+            self.delete(match);
+        })
+      });
+  }
+
 });

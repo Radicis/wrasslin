@@ -50,8 +50,8 @@ angular.module('starter').controller('EventCtrl', function($scope, Auth, $ionicP
   };
 
   // Displays a confirmation to the user and deleted the event is confirmed
-  $scope.delete = function(event){
-    if(Auth.isCreator(event)) {
+  $scope.delete = function(eventObj){
+    if(Auth.isCreator(eventObj)) {
       $scope.check = {};
       var myPopup = $ionicPopup.show({
         templateUrl: 'templates/modals/confirmDelete.html',
@@ -63,9 +63,8 @@ angular.module('starter').controller('EventCtrl', function($scope, Auth, $ionicP
             text: '<b>Delete</b>',
             type: 'button-assertive',
             onTap: function (e) {
-              console.log($scope.check.confirmDelete);
               if ($scope.check.confirmDelete == true) {
-                Events.delete(event);
+                Events.delete(eventObj);
               } else {
                 myPopup.close();
               }

@@ -1,5 +1,7 @@
 angular.module('starter').service('Votes', function($q, $firebaseArray, $firebaseObject) {
 
+    var self = this;
+
   var votesRef = firebase.database().ref().child("votes/");
   var votes = $firebaseArray(votesRef);
 
@@ -40,4 +42,28 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
     }
     return dupe;
   }
+
+  this.delete = function(vote){
+    votesRef.child(vote.$id).remove();
+  };
+
+  this.deleteByEvent = function(event){
+      var eventVotes = $firebaseArray(votesRef.orderByChild("eventId").equalTo(event.$id));
+      eventVotes.$loaded().then(function(votes){
+        votes.forEach(function(vote){
+            self.delete(vote);
+        })
+      });
+  }
+
+  this.deleteByMatch = function(match){
+      var matchVotes = $firebaseArray(votesRef.orderByChild("matchId").equalTo(match.$id));
+      matchVotes.$loaded().then(function(votes){
+        votes.forEach(function(vote){
+            self.delete(vote);
+        })
+      });
+  }
+
+
 });

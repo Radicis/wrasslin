@@ -14,7 +14,7 @@
               <p class="light" ng-if="event.winner">Champion: <strong>{{event.winner}}</strong></p>
         </ion-item>
         <ion-item class="item-dark">
-          <ion-item class="noPadding center item-dark" ng-repeat="match in event.matches | orderBy: '-date'" type="item-text-wrap" >
+          <ion-item class="noPadding center item-dark" ng-repeat="match in event.matches | orderBy: '-date'"  on-hold="delete(match)" type="item-text-wrap" >
             <div>
               <h2 class="title padding center">
                 <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>

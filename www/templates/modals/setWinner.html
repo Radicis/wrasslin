@@ -1,8 +1,9 @@
-<div class="bar bar-header bar-positive">
+<div class="bar bar-header bar-balanced">
   <h1 class="title">Who Won?</h1>
 </div>
-<ion-list class="padding">
+<ion-list class="padding list-dark">
   <ion-radio ng-value="match.p1" ng-model="winner.name">{{match.p1}}</ion-radio>
   <ion-radio ng-value="match.p2" ng-model="winner.name">{{match.p2}}</ion-radio>
+  <ion-radio ng-value="match.noContest" ng-model="winner.name">No Contest</ion-radio>
 </ion-list>
 </div>

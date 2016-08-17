@@ -6,28 +6,28 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
   var eventId = $stateParams.eventId;
 
   // gets the specified event if from firebase
-  Events.get(eventId).then(function(event){
-      $scope.event = event;
+  Events.get(eventId).then(function(eventObj){
+      $scope.event = eventObj;
       // gets all the matches for that event
       $scope.eventMatches = Matches.getByEvent(eventId);
       // Populates the event object (in memory) with its related matches, votes and points
-        event.userPoints = {};
-        Events.getMatches(event).then(function(matches){
-          event.matches = matches;
-          angular.forEach(event.matches, function(match){
+        $scope.event.userPoints = {};
+        Events.getMatches($scope.event).then(function(matches){
+          $scope.event.matches = matches;
+          angular.forEach($scope.event.matches, function(match){
             Matches.getVotes(match).then(function(votes){
               match.votes = votes;
             });
           });
         });
-        Points.getByEvent(event).then(function(points){
-          event.userPoints = points;
+        Points.getByEvent($scope.event).then(function(points){
+          $scope.event.userPoints = points;
         });
         $scope.hide();
   });
 
   // Displays the current event score in a modal
-  $scope.showScore = function(event){
+  $scope.showScore = function(eventObj){
     var myPopup = $ionicPopup.show({
       templateUrl: 'templates/modals/showScore.html',
       title: 'Scores',
@@ -40,11 +40,6 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
 
   // compares 2 objects based on their points property
   var comparePoints = function(a,b) {
-    console.log(a);
-
-    console.log("Apoint: " + a.points);
-    console.log(b);
-    console.log("BpointS: " + b.points);
     if (a.points < b.points)
       return -1;
     if (a.points > b.points)
@@ -53,13 +48,9 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
   };
 
   // Completes the event, calculates winner, sets active to false
-  $scope.eventComplete = function(event){
-    var points = event.userPoints;
-
+  $scope.eventComplete = function(eventObj){
+    var points = eventObj.userPoints;
     points.sort(comparePoints);
-
-
-
     var winner = points[points.length-1].name;
 
     // Points.getEventPoints(event).then(function(points){
@@ -102,8 +93,8 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
     // });
 
     if(winner) {
-      firebase.database().ref('events').child(event.$id).child("winner").set(winner);
-      firebase.database().ref('events').child(event.$id).child("active").set(false);
+      firebase.database().ref('events').child(eventObj.$id).child("winner").set(winner);
+      firebase.database().ref('events').child(eventObj.$id).child("active").set(false);
     }
   };
 
@@ -144,6 +135,32 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
         }
       ]
     });
+  };
+
+  // Displays a confirmation to the user and deleted the event is confirmed
+  $scope.delete = function(match){
+    if(Auth.isCreator(match.eventId)) {
+      $scope.check = {};
+      var myPopup = $ionicPopup.show({
+        templateUrl: 'templates/modals/confirmDelete.html',
+        title: 'You sure?',
+        scope: $scope,
+        buttons: [
+          {text: 'Cancel'},
+          {
+            text: '<b>Delete</b>',
+            type: 'button-assertive',
+            onTap: function (e) {
+              if ($scope.check.confirmDelete == true) {
+                Matches.delete(match);
+              } else {
+                myPopup.close();
+              }
+            }
+          }
+        ]
+      });
+    }
   };
 
   // Swaps from single ot tag team

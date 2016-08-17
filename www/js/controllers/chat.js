@@ -1,15 +1,27 @@
-angular.module('starter').controller("ChatCtrl", function($scope, Auth, Chat,$ionicLoading, $ionicScrollDelegate){
+angular.module('starter').controller("ChatCtrl", function($scope, $state, Auth, Chat,$ionicLoading, $ionicScrollDelegate){
 
     $scope.show();
 
     Chat.getRecent().then(function(chats){
         $scope.chats = chats;
+        $scope.notify = 0;
         $scope.hide();
+    });
+
+    var ref = firebase.database().ref();
+    var chatRef = ref.child("chat");
+    chatRef.on('child_added', function(data){
+        $scope.notify = $scope.notify+1;
     });
 
     $scope.$watch('chats', function(newValue, oldValue) {
         $ionicScrollDelegate.scrollBottom(true);
       }, true);
+
+    $scope.clearNotifications = function(){
+        $scope.notify = 0;
+        $state.go("tab.chat");
+    }
 
     // Refreshes the scope in the case where the update is in memory and not in firebase
     $scope.doRefresh = function() {

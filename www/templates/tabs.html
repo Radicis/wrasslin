@@ -1,10 +1,10 @@
 <ion-tabs class="tabs-icon-top tabs-top tabs-background-dark tabs-color-light">
   <!-- Dashboard Tab -->
-  <ion-tab title="Dashboard" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/tab/dash">
+  <ion-tab title="Dashboard" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/tab/dash" badge="notify" ng-controller="DashCtrl" ng-click="clearNotifications()" badge-style="badge-balanced">
     <ion-nav-view name="tab-dash"></ion-nav-view>
   </ion-tab>
 
-  <ion-tab title="Chat" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/tab/chat">
+  <ion-tab title="Chat" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes" href="#/tab/chat" badge="notify" ng-controller="ChatCtrl" ng-click="clearNotifications()" badge-style="badge-assertive">
     <ion-nav-view name="tab-chat"></ion-nav-view>
   </ion-tab>
 

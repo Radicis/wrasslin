@@ -2,18 +2,60 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
 
   // Pull the full list of active events from the Events service
   $scope.show();
-  Events.getActive().then(function(events){
-    $scope.events = events;
-    $scope.hide();
-  })
 
-  // Refreshes the scope in the case where the update is in memory and not in firebase
-  $scope.doRefresh = function() {
-    Events.getActive().then(function(events){
-      $scope.events = events;
-      $scope.$broadcast('scroll.refreshComplete');
+  Events.getRecentActive().then(function(events){
+      $scope.notify = 0;
+      if(!events[0]){
+          console.log("No Event found. Showing last active");
+          Events.getLastActive().then(function(lastActive){
+              $scope.lastActiveEvent = lastActive;
+              $scope.getEventInfo($scope.lastActiveEvent);
+          });
+      }
+      else{
+          $scope.activeEvent = events[0];
+          $scope.getEventInfo($scope.activeEvent);
+      }
+    $scope.hide();
+});
+
+    $scope.clearNotifications = function(){
+        $scope.notify = 0;
+        $state.go("tab.dash");
+    }
+
+    var ref = firebase.database().ref();
+    var matchRef = ref.child("matches");
+    matchRef.on('child_added', function(data){
+        $scope.notify = $scope.notify+1;
+        $scope.doRefresh();
     });
-  };
+    var votesRef = ref.child("votes");
+    votesRef.on('child_added', function(data){
+        $scope.doRefresh();
+    });
+
+    $scope.doRefresh = function(){
+      $scope.lastActiveEvent = null;
+      $scope.activeEvent = null;
+      $scope.show();
+      Events.getRecentActive().then(function(events){
+          if(!events[0]){
+              console.log("No Event found. Showing last active");
+              Events.getLastActive().then(function(lastActive){
+                  $scope.lastActiveEvent = lastActive;
+                  $scope.getEventInfo($scope.lastActiveEvent);
+                  $scope.$broadcast('scroll.refreshComplete');
+              });
+          }
+          else{
+              $scope.activeEvent = events[0];
+              $scope.getEventInfo($scope.activeEvent);
+              $scope.$broadcast('scroll.refreshComplete');
+          }
+        $scope.hide();
+        });
+    }
 
   // Directs the user to events page
   $scope.goToEvents = function(){
@@ -21,26 +63,25 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
   }
 
   // Populates the event object (in memory) with its related matches, votes and points
-  $scope.getEventInfo = function(event){
-    event.userPoints = {};
-    Events.getMatches(event).then(function(matches){
-      event.matches = matches;
-      angular.forEach(event.matches, function(match){
+  $scope.getEventInfo = function(eventObj){
+    eventObj.userPoints = {};
+    Events.getMatches(eventObj).then(function(matches){
+      eventObj.matches = matches;
+      angular.forEach(eventObj.matches, function(match){
         Matches.getVotes(match).then(function(votes){
           match.votes = votes;
         });
       });
     });
-    Points.getByEvent(event).then(function(points){
-      event.userPoints = points;
+    Points.getByEvent(eventObj).then(function(points){
+      eventObj.userPoints = points;
     });
     $scope.hide();
   };
 
   // Displays the current event score in a modal
-  $scope.showScore = function(event){
-    $scope.doRefresh();
-    $scope.event = event;
+  $scope.showScore = function(eventObj){
+    $scope.event = eventObj;
     var myPopup = $ionicPopup.show({
       templateUrl: 'templates/modals/showScore.html',
       title: 'Scores',
@@ -52,7 +93,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
   };
 
   // Allows the user to vote on a match
-  $scope.vote = function(event, match, wrestler){
+  $scope.vote = function(eventObj, match, wrestler){
     var uid = firebase.auth().currentUser.uid;
     Auth.get(uid).then(function(userInfo){
       var username = userInfo[0].name;
@@ -69,10 +110,10 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
             vote: wrestler,
             date: firebase.database.ServerValue.TIMESTAMP,
             matchId: match.$id,
-            eventId: event.$id
+            eventId: eventObj.$id
           };
-          Votes.add(newVote)
-          $scope.doRefresh();
+          Votes.add(newVote);
+          //$scope.doRefresh();
           return true;
         }
       });
@@ -86,8 +127,9 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
   };
 
   // Updates the match with a winning wrestler, assigns points to winning users
-  $scope.setWinner = function(match, event){
+  $scope.setWinner = function(match, eventObj){
     $scope.match = match;
+    $scope.match.noContest = "noContest";
     $scope.winner = {};
     var myPopup = $ionicPopup.show({
       templateUrl: 'templates/modals/setWinner.html',
@@ -97,15 +139,18 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
         { text: 'Cancel' },
         {
           text: '<b>Confirm</b>',
-          type: 'button-positive',
+          type: 'button-balanced',
           onTap: function(e) {
             if (!$scope.winner.name) {
-              alert("Try again");
+              console.log("Try again");
               e.preventDefault();
-            } else {
+            }
+            else {
               console.log("Match won by:" + $scope.winner.name);
               Matches.setWinner(match, $scope.winner.name);
-              $scope.assignPoints(match, event, $scope.winner.name);
+              if($scope.winner.name!="noContest"){
+                $scope.assignPoints(match, eventObj.$id, $scope.winner.name, 1);
+              }
               $scope.doRefresh();
               myPopup.close();
             }
@@ -116,25 +161,23 @@ angular.module('starter').controller('DashCtrl', function($scope, $window,$ionic
   };
 
   // Assigns points to winning users
-  $scope.assignPoints = function(match, event, winner, points){
+  $scope.assignPoints = function(match, eventObjId, winner, points){
     Votes.getByMatch(match.$id).then(function(matchVotes) {
       matchVotes.forEach(function(vote){
         if(vote.vote==winner){
-          Points.getByReference(event.$id, vote.uid).$loaded().then(function(uPoints){
+          Points.getByReference(eventObjId, vote.uid).$loaded().then(function(uPoints){
             if(uPoints.points>0){
               points = uPoints.points + 1;
             }
               var newPoints = {
                 uid: vote.uid,
-                eventId: event.$id,
+                eventId: eventObjId,
                 matchId: match.$id,
                 points: points,
                 name: vote.name,
                 img: vote.img,
               };
-              Points.set(event.$id, vote.uid, newPoints);
-              $scope.doRefresh();
-
+              Points.set(eventObjId, vote.uid, newPoints);
           });
         }
       });

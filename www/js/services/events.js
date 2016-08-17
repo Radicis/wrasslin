@@ -21,6 +21,24 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
     return def.promise;
   };
 
+  this.getRecentActive = function(){
+      var def = $q.defer();
+      var active = $firebaseArray(eventsRef.orderByChild("active").equalTo(true).limitToFirst(1));
+      active.$loaded().then(function(snap){
+          def.resolve(snap);
+      })
+      return def.promise;
+  };
+
+  this.getLastActive = function(){
+      var def = $q.defer();
+      var lastActive = $firebaseArray(eventsRef.limitToFirst(1));
+      lastActive.$loaded().then(function(snap){
+          def.resolve(snap[0]);
+      })
+      return def.promise;
+  };
+
   this.get = function(eventId){
     var def = $q.defer();
     var events = $firebaseArray(eventsRef);
@@ -45,6 +63,8 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
 
   this.delete = function(event){
     eventsRef.child(event.$id).remove();
+    Matches.deleteByEvent(event);
+    Votes.deleteByEvent(event);
   };
 
 

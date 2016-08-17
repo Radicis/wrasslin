@@ -13,7 +13,7 @@
         <button ng-if="isAuthorised()" class="button button-clear button-balanced" ng-click="addEvent()">Create Event</button>
     </div>
     <ion-list>
-      <ion-item class="item-remove-animate item-icon-right item-dark" on-hold="delete(event)" ng-repeat="event in events | orderBy: '-date'" type="item-text-wrap" href="#/tab/events/{{event.$id}}">
+      <ion-item class="item-remove-animate item-icon-right item-dark" on-hold="delete(event)" ng-repeat="event in events | orderBy: 'date'" type="item-text-wrap" href="#/tab/events/{{event.$id}}">
         <h2>{{event.name}}</h2>
         <p>{{event.location}} : {{event.date | date:dateFormat}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
