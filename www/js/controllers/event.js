@@ -1,4 +1,15 @@
-angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestlers, Auth, Points,  $ionicPopup, $stateParams, Events, Matches, $firebaseObject) {
+angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestlers, $ionicPlatform, Auth, Points,  $ionicPopup, $stateParams, Events, Matches, $firebaseObject) {
+
+  $ionicPlatform.ready(function() {
+    var push = new Ionic.Push({
+      "debug": true
+    });
+
+    push.register(function(token) {
+      console.log("Device token:",token.token);
+    });
+  });
+
 
   $scope.show();
 

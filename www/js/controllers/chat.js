@@ -12,6 +12,7 @@ angular.module('starter').controller("ChatCtrl", function($scope, $state, Auth, 
     var chatRef = ref.child("chat");
     chatRef.on('child_added', function(data){
         $scope.notify = $scope.notify+1;
+        $scope.chats.push(data);
     });
 
     $scope.$watch('chats', function(newValue, oldValue) {
@@ -21,7 +22,7 @@ angular.module('starter').controller("ChatCtrl", function($scope, $state, Auth, 
     $scope.clearNotifications = function(){
         $scope.notify = 0;
         $state.go("tab.chat");
-    }
+    };
 
     // Refreshes the scope in the case where the update is in memory and not in firebase
     $scope.doRefresh = function() {

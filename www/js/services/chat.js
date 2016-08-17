@@ -11,7 +11,7 @@ angular.module('starter').service('Chat', function($q, $firebaseArray, $firebase
           def.resolve(snap);
         });
         return def.promise;
-    }
+    };
 
     this.chat = function(message){
         chatRef.push(message);
