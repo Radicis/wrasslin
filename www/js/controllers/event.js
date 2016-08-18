@@ -1,44 +1,22 @@
-angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestlers, $ionicPlatform, Auth, Points,  $ionicPopup, $stateParams, Events, Matches, $firebaseObject) {
-
-  $ionicPlatform.ready(function() {
-    var push = new Ionic.Push({
-      "debug": true
-    });
-
-    push.register(function(token) {
-      console.log("Device token:",token.token);
-    });
-  });
-
-
-  $scope.show();
+angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestlers, Auth, Points,  $ionicPopup, $stateParams, Events, Matches, $firebaseObject) {
 
   // eventID parameter pulled from URI parsing
   var eventId = $stateParams.eventId;
 
   // gets the specified event if from firebase
   Events.get(eventId).then(function(eventObj){
+    $scope.show()
       $scope.event = eventObj;
       // gets all the matches for that event
-      $scope.eventMatches = Matches.getByEvent(eventId);
-      // Populates the event object (in memory) with its related matches, votes and points
-        $scope.event.userPoints = {};
-        Events.getMatches($scope.event).then(function(matches){
-          $scope.event.matches = matches;
-          angular.forEach($scope.event.matches, function(match){
-            Matches.getVotes(match).then(function(votes){
-              match.votes = votes;
-            });
+          Matches.getByEvent($scope.event.$id).then(function(matches){
+              $scope.matches = matches;
           });
-        });
-        Points.getByEvent($scope.event).then(function(points){
-          $scope.event.userPoints = points;
-        });
         $scope.hide();
   });
 
   // Displays the current event score in a modal
   $scope.showScore = function(eventObj){
+    $scope.eventScores = eventObj;
     var myPopup = $ionicPopup.show({
       templateUrl: 'templates/modals/showScore.html',
       title: 'Scores',

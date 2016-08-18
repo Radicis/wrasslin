@@ -1,4 +1,4 @@
-angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPopup,$ionicLoading){
+angular.module('starter').controller("AuthCtrl", function($scope, $state, Auth, $ionicPopup,$ionicLoading){
 
     var loadingText = [
         "Making Cena win",
@@ -10,7 +10,8 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
         "Certifying Gs"
     ];
 
-    $scope.show = function() {
+  // shows the loading overlay
+  $scope.show = function() {
         var index = Math.floor(Math.random() * (loadingText.length - 0)) + 0;
         $ionicLoading.show({
           duration: 30000,
@@ -20,6 +21,7 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
         });
   };
 
+  // hides the loading overlay
   $scope.hide = function(){
     $ionicLoading.hide().then(function(){
     });
@@ -53,6 +55,7 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
     return Auth.isCreator(event);
   };
 
+  // Returns the logged in user's uid
   $scope.getUid = function(){
     if(Auth.isAuthorised()) {
       return firebase.auth().currentUser.uid;
@@ -69,7 +72,7 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
         // Create the custom user info record to asssociate this user with name/image
         Auth.setUserInfo(user.uid, profile);
       });
-      //$route.reload();
+      $state.go('tabs.dash');
     } else {
       console.log("Not Signed in.");
       Auth.authorise(false);

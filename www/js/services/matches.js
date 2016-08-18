@@ -19,12 +19,13 @@ angular.module('starter').service('Matches', function($q, Votes, $firebaseArray,
 };
 
     this.createMatch = function (eventId, type, p1, p2) {
-      matchesRef.push({
+      var dateTime = firebase.database.ServerValue.TIMESTAMP;
+      var newKey = matchesRef.push({
         eventId: eventId,
         type: type,
         p1: p1,
         p2: p2,
-        date: firebase.database.ServerValue.TIMESTAMP,
+        date: dateTime,
         active: true
       });
     };

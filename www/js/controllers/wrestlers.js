@@ -11,6 +11,7 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
       });
   });
 
+
   // displays a confirmation to the user and dletes the wrestler is confirmed
   $scope.delete = function(wrestler){
     $scope.check = {};
@@ -24,7 +25,6 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
           text: '<b>Delete</b>',
           type: 'button-assertive',
           onTap: function(e) {
-            console.log($scope.check.confirmDelete);
             if ($scope.check.confirmDelete==true) {
               Wrestlers.delete(wrestler);
             } else {
@@ -53,32 +53,41 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
             if (!$scope.newWrestler.name) {
               e.preventDefault();
             } else {
+                $scope.saveWrestler($scope.newWrestler);
               myPopup.close();
             }
           }
         }
       ]
     });
-    myPopup.then(function(res) {
-      var wrass = Wrestlers.getWikiInfo($scope.newWrestler.name);
-      var img;
+  };
 
-      wrass.then(function(response){
-        try{
-          var pageId = response.data.continue.imcontinue.split("|")[0];
-          var pages = response.data.query.pages;
-          var imgsrc = pages[pageId];
-          img = imgsrc.thumbnail.source;
-        }catch(err){img = null}
-        var wrestler = {
-          isTeam: $scope.newWrestler.isTeam,
-          name:  $scope.newWrestler.name.split('(')[0],
-          active: true,
-          pic: img
+  $scope.saveWrestler = function(wrestler) {
+    Wrestlers.exists(wrestler.name).then(function(exists){
+        console.log(exists);
+        if(exists != false){
+            alert("Already exists in the database!");
         }
-        Wrestlers.add(wrestler);
-        console.log('Created!', $scope.newWrestler.name);
-      });
+        else{
+            var wrass = Wrestlers.getWikiInfo($scope.newWrestler.name);
+            var img;
+            wrass.then(function(response){
+              try{
+                var pageId = response.data.continue.imcontinue.split("|")[0];
+                var pages = response.data.query.pages;
+                var imgsrc = pages[pageId];
+                img = imgsrc.thumbnail.source;
+              }catch(err){img = null}
+              var wrestler = {
+                isTeam: $scope.newWrestler.isTeam,
+                name:  $scope.newWrestler.name.split('(')[0],
+                active: true,
+                pic: img
+              }
+              Wrestlers.add(wrestler);
+              console.log('Created!', $scope.newWrestler.name);
+            });
+        }
     });
   };
-});
+  });

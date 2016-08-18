@@ -23,8 +23,10 @@ angular.module('starter').service("Auth", function($q, $firebaseAuth, $cordovaOa
   };
 
   this.isCreator = function(event){
-    var uid = firebase.auth().currentUser.uid;
-    return event.owner == uid;
+    try{
+        var uid = firebase.auth().currentUser.uid;
+        return event.owner == uid;
+    }catch(err){return false;}
   };
 
   this.setUserInfo = function(uid, profile){

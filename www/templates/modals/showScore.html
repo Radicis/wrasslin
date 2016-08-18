@@ -1,8 +1,9 @@
 <div class="bar bar-header bar-balanced">
   <h1 class="title">Scores</h1>
 </div>
+<h3 ng-if="!eventScores.points" class="center">Nothing yet!</h3>
 <ion-list>
-  <ion-item ng-repeat="point in event.userPoints | orderBy: '-points'" class="item-avatar item-dark">
+  <ion-item ng-repeat="point in eventScores.points" class="item-avatar item-dark">
     <img src="{{point.img}}">
     <p>{{point.name}} <br>{{point.points}} point(s)</p>
 </ion-item>

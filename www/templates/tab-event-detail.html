@@ -5,22 +5,30 @@
       </button>
     </ion-nav-buttons>
   <ion-content delegate-handle="scrollArea">
-    <ion-list>
+      <ion-list ng-if="event">
         <ion-item class="item-dark">
-              <button ng-if="event.active && isCreator(event)" class="pull-right button scoresButton" ng-click="eventComplete(event)">Finish</button>
-              <button ng-if"!event.active" class="pull-right button scoresButton" ng-click="showScore(event)">Score</button>
-              <h2 class="header">{{event.name}}</h2>
-              <p class="dull">{{event.location}} : {{event.date | date:dateFormat}}</p>
-              <p class="light" ng-if="event.winner">Champion: <strong>{{event.winner}}</strong></p>
-        </ion-item>
-        <ion-item class="item-dark">
-          <ion-item class="noPadding center item-dark" ng-repeat="match in event.matches | orderBy: '-date'"  on-hold="delete(match)" type="item-text-wrap" >
-            <div>
-              <h2 class="title padding center">
+          <button class="pull-right button scoresButton" ng-click="showScore(event)">Score</button>
+          <h2 class="header">{{event.name}}</h2>
+          <p class="dull">{{event.location}} : {{event.date | date:dateFormat}}</p>
+          <hr>
+          <ion-item class="center item-dark"
+                    ng-click="toggleGroup(match)"
+                    class="padding center" ng-repeat="match in matches | orderBy: '-date'" type="item-text-wrap" >
+            <div ng-class="{activeGroup: isGroupShown(match)}">
+              <h2 class="title lessPadding center">
                 <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>
+              <button ng-if="match.active && isCreator(event)" class="button button-balanced" ng-click="setWinner(match, event)">Set Winner</button>
+              <p ng-if="match.votes.length>0">Votes: {{match.votes.length}}</p>
+              <ion-list>
+                <ion-item ng-repeat="vote in match.votes" class="item-accordion center item-avatar noborder item-dark" ng-show="isGroupShown(match)">
+                  <img class="epic" src="{{vote.img}}" /><p class="padding-top"><strong>{{vote.name}}</strong> voted <strong>{{vote.vote}}</strong></p>
+                </ion-item>
+              </ion-list>
             </div>
           </ion-item>
         </ion-item>
+      </div>
     </ion-list>
+
   </ion-content>
 </ion-view>

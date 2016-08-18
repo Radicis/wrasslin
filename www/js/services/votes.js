@@ -28,20 +28,15 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
   };
 
   this.add = function(vote){
-      firebase.database().ref('votes/').push(vote);
+      var newKey = firebase.database().ref('votes/').push(vote).key;
+      firebase.database().ref().child("matches").child(vote.matchId).child("votes/" + vote.uid).set(vote);
   }
 
   this.hasUserVoted = function(votes, uid){
-    var dupe = false;
     if(votes){
-      votes.forEach(function(vote){
-        if(vote.uid==uid){
-          dupe = true;
-        }
-      });
+        return !(typeof votes[uid] === "undefined");
     }
-    return dupe;
-  }
+  };
 
   this.delete = function(vote){
     votesRef.child(vote.$id).remove();
@@ -54,7 +49,7 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
             self.delete(vote);
         })
       });
-  }
+  };
 
   this.deleteByMatch = function(match){
       var matchVotes = $firebaseArray(votesRef.orderByChild("matchId").equalTo(match.$id));

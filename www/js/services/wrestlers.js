@@ -27,17 +27,28 @@ angular.module('starter').service('Wrestlers', function($q, $http, $firebaseArra
        return def.promise;
     };
 
-    this.getById = function(id){
-      var def = $q.defer();
-      var matchVotes = $firebaseArray(votesRef.orderByChild("matchId").equalTo(matchId));
-      matchVotes.$loaded().then(function(snap){
-        def.resolve(snap);
-      });
-      return def.promise;
-    };
-
     this.add = function(wrestler){
         westerlerRef.push(wrestler);
+    };
+
+    this.exists = function(name){
+        var def = $q.defer();
+        var thisWrestler = $firebaseArray(westerlerRef.orderByChild("name").equalTo(name));
+        thisWrestler.$loaded().then(function(snap){
+            try{
+             def.resolve(snap[0].$id);
+         }catch(err){def.resolve(false);}
+        });
+        return def.promise;
+    }
+
+    this.get = function(id){
+          var def = $q.defer();
+          var wrestler = $firebaseArray(westerlerRef);
+          wrestler.$loaded().then(function(snap){
+              def.resolve(snap.$getRecord(id));
+          })
+          return def.promise;
     }
 
     this.delete = function(wrestler){

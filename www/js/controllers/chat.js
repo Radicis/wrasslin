@@ -12,12 +12,7 @@ angular.module('starter').controller("ChatCtrl", function($scope, $state, Auth, 
     var chatRef = ref.child("chat");
     chatRef.on('child_added', function(data){
         $scope.notify = $scope.notify+1;
-        $scope.chats.push(data);
     });
-
-    $scope.$watch('chats', function(newValue, oldValue) {
-        $ionicScrollDelegate.scrollBottom(true);
-      }, true);
 
     $scope.clearNotifications = function(){
         $scope.notify = 0;
@@ -52,6 +47,7 @@ angular.module('starter').controller("ChatCtrl", function($scope, $state, Auth, 
             };
             Chat.chat(newChat);
             $scope.newChat.text = "";
+            $ionicScrollDelegate.scrollBottom(true);
         });
     }
 });
