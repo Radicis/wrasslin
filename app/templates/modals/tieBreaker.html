@@ -1,0 +1,12 @@
+<div class="bar bar-header bar-balanced">
+  <h1 class="title">Tie breaker!</h1>
+</div>
+<label class="item item-input item-select">
+  <div class="input-label">
+    &nbsp;
+  </div>
+  <select ng-options="point as point.name for point in winningPoints"
+          ng-model="winner.name">
+  </select>
+</label>
+</div>
