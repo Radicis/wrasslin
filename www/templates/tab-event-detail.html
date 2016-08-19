@@ -7,6 +7,7 @@
   <ion-content delegate-handle="scrollArea">
       <ion-list ng-if="event">
         <ion-item class="item-dark">
+          <button ng-if="event.active && isCreator(event)" class="pull-right button scoresButton" ng-click="eventComplete(event)">Finish</button>
           <button class="pull-right button scoresButton" ng-click="showScore(event)">Score</button>
           <h2 class="header">{{event.name}}</h2>
           <p class="dull">{{event.location}} : {{event.date | date:dateFormat}}</p>

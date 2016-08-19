@@ -29,6 +29,10 @@ html, .pane, .view {
   text-align:center;
 }
 
+.item .badge {
+  margin-right: 40px
+}
+
 .scroll-content{
   background-color:$dark;
   padding:0;

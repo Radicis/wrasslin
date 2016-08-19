@@ -72,11 +72,11 @@ angular.module('starter').controller("AuthCtrl", function($scope, $state, Auth, 
         // Create the custom user info record to asssociate this user with name/image
         Auth.setUserInfo(user.uid, profile);
       });
-      $state.go('tabs.dash');
+      $scope.$apply();
     } else {
       console.log("Not Signed in.");
       Auth.authorise(false);
-      $route.reload();
+      $scope.$apply();
     }
   });
 

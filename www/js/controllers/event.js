@@ -16,14 +16,16 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
 
   // Displays the current event score in a modal
   $scope.showScore = function(eventObj){
-    $scope.eventScores = eventObj;
-    var myPopup = $ionicPopup.show({
-      templateUrl: 'templates/modals/showScore.html',
-      title: 'Scores',
-      scope: $scope,
-      buttons: [
-        { text: 'Close' }
-      ]
+    Points.getByEvent(eventObj.$id).then(function(points){
+        $scope.showPoints = points;
+        var myPopup = $ionicPopup.show({
+          templateUrl: 'templates/modals/showScore.html',
+          title: 'Scores',
+          scope: $scope,
+          buttons: [
+            { text: 'Close' }
+          ]
+        });
     });
   };
 
@@ -38,9 +40,16 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
 
   // Completes the event, calculates winner, sets active to false
   $scope.eventComplete = function(eventObj){
-    var points = eventObj.userPoints;
-    points.sort(comparePoints);
-    var winner = points[points.length-1].name;
+    var points = Points.getByEvent(eventObj.$id).then(function(points){
+        points.sort(comparePoints);
+        var winner = points[points.length-1].name;
+        if(winner) {
+          firebase.database().ref('events').child(eventObj.$id).child("winner").set(winner);
+          firebase.database().ref('events').child(eventObj.$id).child("active").set(false);
+        }
+    })
+
+
 
     // Points.getEventPoints(event).then(function(points){
     //  points.sort(comparePoints);
@@ -81,10 +90,7 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
     //   }
     // });
 
-    if(winner) {
-      firebase.database().ref('events').child(eventObj.$id).child("winner").set(winner);
-      firebase.database().ref('events').child(eventObj.$id).child("active").set(false);
-    }
+
   };
 
   // gets all of the wresters in the firebase to populate the add match dropdowns
@@ -155,5 +161,18 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
   // Swaps from single ot tag team
   $scope.matchTypeChanged = function(matchType){
     $scope.selectedMatchtype = matchType;
+  };
+
+  // Accordian functions
+  $scope.toggleGroup = function(group) {
+    if ($scope.isGroupShown(group)) {
+      $scope.shownGroup = null;
+    } else {
+      $scope.shownGroup = group;
+    }
+  };
+
+  $scope.isGroupShown = function(group) {
+    return $scope.shownGroup === group;
   };
 })

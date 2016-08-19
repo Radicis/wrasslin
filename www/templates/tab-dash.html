@@ -8,7 +8,7 @@
     </button>
   </ion-nav-buttons>
   <ion-content delegate-handle="scrollArea">
-    <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()"></ion-refresher>
+    <ion-refresher pulling-text="Pull to refresh" on-refresh="populateEventInfo()"></ion-refresher>
       <div class="center">
         <img class="headerimg" src="./img/banner.jpg" />
       </div>
@@ -59,7 +59,7 @@
         <hr>
         <ion-item class="center item-dark"
                   ng-click="toggleGroup(match)"
-                  class="padding center" ng-repeat="match in lastActiveEvent.matches | orderBy: '-date'" type="item-text-wrap" >
+                  class="padding center" ng-repeat="match in lastActiveMatches | orderBy: '-date'" type="item-text-wrap" >
           <div ng-class="{activeGroup: isGroupShown(match)}">
             <h2 class="title lessPadding center">
               <span ng-class="{'isWinner': match.winner==match.p1}">{{match.p1}}</span> vs <span ng-class="{'isWinner': match.winner==match.p2}">{{match.p2}}</span></h2>

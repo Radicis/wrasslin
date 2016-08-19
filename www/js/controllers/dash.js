@@ -21,6 +21,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
                   $scope.activeMatches = matches;
               });
           }
+        $scope.$broadcast('scroll.refreshComplete');
         $scope.hide();
     });
   }
@@ -54,14 +55,16 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
 
   // Displays the current event score in a modal
   $scope.showScore = function(eventObj){
-    $scope.eventScores = eventObj;
-    var myPopup = $ionicPopup.show({
-      templateUrl: 'templates/modals/showScore.html',
-      title: 'Scores',
-      scope: $scope,
-      buttons: [
-        { text: 'Close' }
-      ]
+    Points.getByEvent(eventObj.$id).then(function(points){
+        $scope.showPoints = points;
+        var myPopup = $ionicPopup.show({
+          templateUrl: 'templates/modals/showScore.html',
+          title: 'Scores',
+          scope: $scope,
+          buttons: [
+            { text: 'Close' }
+          ]
+        });
     });
   };
 
@@ -163,10 +166,9 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
       $scope.shownGroup = group;
     }
   };
+
   $scope.isGroupShown = function(group) {
     return $scope.shownGroup === group;
   };
-
-
 
 })
