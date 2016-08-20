@@ -15,7 +15,7 @@
     <ion-list>
       <ion-item class="item-remove-animate item-icon-right item-dark" on-hold="delete(event)" ng-repeat="event in events | orderBy: '-date'" type="item-text-wrap" href="#/tab/events/{{event.$id}}">
         <h2>{{event.name}}</h2>
-        <p>{{event.location}} : {{event.date | date:dateFormat}}</p>
+        <p>{{event.location}} : {{event.date | date:'medium'}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
     </ion-list>
