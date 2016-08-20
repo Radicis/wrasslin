@@ -40,14 +40,17 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
 
   // Completes the event, calculates winner, sets active to false
   $scope.eventComplete = function(eventObj){
-    var points = Points.getByEvent(eventObj.$id).then(function(points){
-        points.sort(comparePoints);
-        var winner = points[points.length-1].name;
+    Points.getByEvent(eventObj.$id).then(function(points){
+        if(points.length>0) {
+          points.sort(comparePoints);
+          var winner = points[points.length - 1].name;
+        }
+        else{return;}
         if(winner) {
           firebase.database().ref('events').child(eventObj.$id).child("winner").set(winner);
           firebase.database().ref('events').child(eventObj.$id).child("active").set(false);
         }
-    })
+    });
 
 
 

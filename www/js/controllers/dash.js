@@ -1,52 +1,52 @@
 angular.module('starter').controller('DashCtrl', function($scope, $window, $ionicModal, $ionicLoading, $state, Points, Events, Matches, Votes, Auth, $firebaseObject, $firebaseArray, $firebaseAuth, $ionicPopup) {
 
   // Pull the full list of active events from the Events service
-    $scope.populateEventInfo = function(){
-     $scope.show();
-      Events.getRecentActive().then(function(events){
-          if(!events[0]){
-              console.log("No Event found. Showing last active");
-              Events.getLastActive().then(function(lastActive){
-                  try{
-                      $scope.lastActiveEvent = lastActive;
-                      Matches.getByEvent($scope.lastActiveEvent.$id).then(function(matches){
-                          $scope.lastActiveMatches = matches;
-                      });
-                  }catch(err){console.log(err);}
-              });
-          }
-          else{
-              $scope.activeEvent = events[0];
-              Matches.getByEvent($scope.activeEvent.$id).then(function(matches){
-                  $scope.activeMatches = matches;
-              });
-          }
-        $scope.$broadcast('scroll.refreshComplete');
-        $scope.hide();
+  $scope.populateEventInfo = function(){
+    $scope.show();
+    Events.getRecentActive().then(function(events){
+      if(!events[0]){
+        console.log("No Event found. Showing last active");
+        Events.getLastActive().then(function(lastActive){
+          try{
+            $scope.lastActiveEvent = lastActive;
+            Matches.getByEvent($scope.lastActiveEvent.$id).then(function(matches){
+              $scope.lastActiveMatches = matches;
+            });
+          }catch(err){console.log(err);}
+        });
+      }
+      else{
+        $scope.activeEvent = events[0];
+        Matches.getByEvent($scope.activeEvent.$id).then(function(matches){
+          $scope.activeMatches = matches;
+        });
+      }
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.hide();
     });
   }
 
   Events.getRecentActive().then(function(events){
-      $scope.notify = 0;
-      $scope.populateEventInfo();
-    });
+    $scope.notify = 0;
+    $scope.populateEventInfo();
+  });
 
-    $scope.clearNotifications = function(){
-        $scope.notify = 0;
-        $state.go("tab.dash");
-    }
+  $scope.clearNotifications = function(){
+    $scope.notify = 0;
+    $state.go("tab.dash");
+  }
 
-    var ref = firebase.database().ref();
-    var matchRef = ref.child("matches");
-    matchRef.on('child_added', function(data){
-        $scope.notify = $scope.notify+1;
-        $scope.populateEventInfo();
-    });
+  var ref = firebase.database().ref();
+  var matchRef = ref.child("matches");
+  matchRef.on('child_added', function(data){
+    $scope.notify = $scope.notify+1;
+    $scope.populateEventInfo();
+  });
 
-    var votesRef = ref.child("votes");
-    votesRef.on('child_added', function(data){
-        $scope.populateEventInfo();
-    });
+  var votesRef = ref.child("votes");
+  votesRef.on('child_added', function(data){
+    $scope.populateEventInfo();
+  });
 
   // Directs the user to events page
   $scope.goToEvents = function(){
@@ -56,15 +56,15 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
   // Displays the current event score in a modal
   $scope.showScore = function(eventObj){
     Points.getByEvent(eventObj.$id).then(function(points){
-        $scope.showPoints = points;
-        var myPopup = $ionicPopup.show({
-          templateUrl: 'templates/modals/showScore.html',
-          title: 'Scores',
-          scope: $scope,
-          buttons: [
-            { text: 'Close' }
-          ]
-        });
+      $scope.showPoints = points;
+      var myPopup = $ionicPopup.show({
+        templateUrl: 'templates/modals/showScore.html',
+        title: 'Scores',
+        scope: $scope,
+        buttons: [
+          { text: 'Close' }
+        ]
+      });
     });
   };
 
@@ -73,23 +73,23 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
     var uid = firebase.auth().currentUser.uid;
     Auth.get(uid).then(function(userInfo){
       var username = userInfo[0].name;
-        if(Votes.hasUserVoted(match.votes, uid)){
-          console.log("User has already voted.");
-          return false;
-        }
-        else{
-          var newVote = {
-            uid: uid,
-            name: username,
-            img: userInfo[0].photo,
-            vote: wrestler,
-            date: firebase.database.ServerValue.TIMESTAMP,
-            matchId: match.$id,
-            eventId: eventObj.$id
-          };
-          Votes.add(newVote);
-          return true;
-        }
+      if(Votes.hasUserVoted(match.votes, uid)){
+        console.log("User has already voted.");
+        return false;
+      }
+      else{
+        var newVote = {
+          uid: uid,
+          name: username,
+          img: userInfo[0].photo,
+          vote: wrestler,
+          date: firebase.database.ServerValue.TIMESTAMP,
+          matchId: match.$id,
+          eventId: eventObj.$id
+        };
+        Votes.add(newVote);
+        return true;
+      }
 
     });
   };
@@ -143,20 +143,20 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
             if(uPoints.points>0){
               points = uPoints.points + 1;
             }
-              var newPoints = {
-                uid: vote.uid,
-                eventId: eventObjId,
-                matchId: match.$id,
-                points: points,
-                name: vote.name,
-                img: vote.img,
-              };
-              Points.set(eventObjId, vote.uid, newPoints);
+            var newPoints = {
+              uid: vote.uid,
+              eventId: eventObjId,
+              matchId: match.$id,
+              points: points,
+              name: vote.name,
+              img: vote.img
+            };
+            Points.set(eventObjId, vote.uid, newPoints);
           });
         }
       });
     });
-  }
+  };
 
   // Accordian functions
   $scope.toggleGroup = function(group) {
@@ -171,4 +171,4 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
     return $scope.shownGroup === group;
   };
 
-})
+});
