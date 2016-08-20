@@ -1,63 +1,81 @@
 angular.module('starter').service('Wrestlers', function($q, $http, $firebaseArray, $firebaseObject) {
 
-    var westerlerRef = firebase.database().ref().child("wrestlers/");
+  var wrestlerRef = firebase.database().ref().child("wrestlers");
+  var maleRef = wrestlerRef.child("male");
+  var tagRef = wrestlerRef.child("tag");
+  var femaleRef = wrestlerRef.child("female");
 
-    this.getAll = function(){
-      return $firebaseArray(westerlerRef);
-    };
+  this.getAll = function(){
+    return $firebaseArray(wresterlerRef);
+  };
 
 
-    this.getAllSingle = function(){
-        var def = $q.defer();
-        var tagRef = westerlerRef.orderByChild("isTeam").equalTo(false);
-        var tagWrestlers =  $firebaseArray(tagRef);
-        tagWrestlers.$loaded().then(function(snap){
-            def.resolve(snap);
-        })
-        return def.promise;
-    };
+  this.getAllMale = function(){
+    var def = $q.defer();
+    var maleWrestlers =  $firebaseArray(maleRef);
+    maleWrestlers.$loaded().then(function(snap){
+      def.resolve(snap);
+    })
+    return def.promise;
+  };
 
-    this.getAllTag = function(){
-       var def = $q.defer();
-       var tagRef = westerlerRef.orderByChild("isTeam").equalTo(true);
-       var tagWrestlers =  $firebaseArray(tagRef);
-       tagWrestlers.$loaded().then(function(snap){
-           def.resolve(snap);
-       })
-       return def.promise;
-    };
+  this.getAllTag = function(){
+    var def = $q.defer();
+    var tagWrestlers =  $firebaseArray(tagRef);
+    tagWrestlers.$loaded().then(function(snap){
+      def.resolve(snap);
+    })
+    return def.promise;
+  };
 
-    this.add = function(wrestler){
-        westerlerRef.push(wrestler);
-    };
+  this.getAllFemales = function(){
+    var def = $q.defer();
+    var femaleWrestlers =  $firebaseArray(femaleRef);
+    femaleWrestlers.$loaded().then(function(snap){
+      def.resolve(snap);
+    })
+    return def.promise;
+  };
 
-    this.exists = function(name){
-        var def = $q.defer();
-        var thisWrestler = $firebaseArray(westerlerRef.orderByChild("name").equalTo(name));
-        thisWrestler.$loaded().then(function(snap){
-            try{
-             def.resolve(snap[0].$id);
-         }catch(err){def.resolve(false);}
-        });
-        return def.promise;
-    }
+  this.addMale = function(wrestler){
+    maleRef.push(wrestler);
+  };
 
-    this.get = function(id){
-          var def = $q.defer();
-          var wrestler = $firebaseArray(westerlerRef);
-          wrestler.$loaded().then(function(snap){
-              def.resolve(snap.$getRecord(id));
-          })
-          return def.promise;
-    }
+  this.addFemale = function(wrestler){
+    femaleRef.push(wrestler);
+  };
 
-    this.delete = function(wrestler){
-      westerlerRef.child(wrestler.$id).remove();
-      };
+  this.addTag = function(wrestler){
+    tagRef.push(wrestler);
+  };
 
-    this.getWikiInfo = function(name){
-        return $http.jsonp('http://en.wikipedia.org/w/api.php?titles=' + name + '&action=query&format=json&prop=images%7Cpageimages&redirects=1&callback=JSON_CALLBACK');
-    }
+  this.exists = function(name){
+    var def = $q.defer();
+    var thisWrestler = $firebaseArray(wresterlerRef.orderByChild("name").equalTo(name));
+    thisWrestler.$loaded().then(function(snap){
+      try{
+        def.resolve(snap[0].$id);
+      }catch(err){def.resolve(false);}
+    });
+    return def.promise;
+  }
+
+  this.get = function(id){
+    var def = $q.defer();
+    var wrestler = $firebaseArray(wresterlerRef);
+    wrestler.$loaded().then(function(snap){
+      def.resolve(snap.$getRecord(id));
+    })
+    return def.promise;
+  }
+
+  this.delete = function(wrestler){
+    wresterlerRef.child(wrestler.$id).remove();
+  };
+
+  this.getWikiInfo = function(name){
+    return $http.jsonp('http://en.wikipedia.org/w/api.php?titles=' + name + '&action=query&format=json&prop=images%7Cpageimages&redirects=1&callback=JSON_CALLBACK');
+  }
 
 
 });

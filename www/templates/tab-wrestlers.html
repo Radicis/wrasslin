@@ -1,31 +1,41 @@
 <ion-view view-title="Wrestlers">
-    <ion-nav-buttons side="right">
-      <button ng-if="isAuthorised()" class="button icon-right ion-plus" ng-click="addWrestler()">
-      </button>
-    </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button ng-if="isAuthorised()" class="button icon-right ion-plus" ng-click="addWrestler()">
+    </button>
+  </ion-nav-buttons>
   <ion-content delegate-handle="scrollArea">
     <div class="center">
       <img class="headerimg" src="./img/banner.jpg" />
     </div>
     <ion-list>
-        <div class="item dark item-divider">
-    Singles
-  </div>
-        <ion-item class="item-avatar item-icon-left item-dark" on-hold="delete(wrestler)" ng-repeat="wrestler in single | orderBy: 'name'">
-          <img ng-if="wrestler.pic" class="epic" src="{{wrestler.pic}}" />
-          <i ng-if="!wrestler.pic" class="icon ion-person"></i>
-          <p class="padding-top"><strong> {{wrestler.name}}</strong> </p>
-        </ion-item>
+      <div class="item dark item-divider">
+        Singles
+      </div>
+      <ion-item class="item-avatar item-icon-left item-dark" on-hold="delete(wrestler)" ng-repeat="wrestler in male | orderBy: 'name'">
+        <img ng-if="wrestler.pic" class="epic" src="{{wrestler.pic}}" />
+        <i ng-if="!wrestler.pic" class="icon ion-person"></i>
+        <p class="padding-top"><strong> {{wrestler.name}}</strong> </p>
+      </ion-item>
     </ion-list>
     <div class="item dark item-divider">
-Teams
-</div>
+      Teams
+    </div>
     <ion-list>
-        <ion-item class="item-avatar item-icon-left item-dark" on-hold="delete(wrestler)" ng-repeat="wrestler in tag | orderBy: 'name'">
-          <img ng-if="wrestler.pic" class="epic" src="{{wrestler.pic}}" />
-          <i ng-if="!wrestler.pic" class="icon ion-person-stalker"></i>
-          <p class="padding-top"><strong>{{wrestler.name}}</strong> </p>
-        </ion-item>
+      <ion-item class="item-avatar item-icon-left item-dark" on-hold="delete(wrestler)" ng-repeat="wrestler in tag | orderBy: 'name'">
+        <img ng-if="wrestler.pic" class="epic" src="{{wrestler.pic}}" />
+        <i ng-if="!wrestler.pic" class="icon ion-person-stalker"></i>
+        <p class="padding-top"><strong>{{wrestler.name}}</strong> </p>
+      </ion-item>
+    </ion-list>
+    <div class="item dark item-divider">
+      Women (Oooooof)
+    </div>
+    <ion-list>
+      <ion-item class="item-avatar item-icon-left item-dark" on-hold="delete(wrestler)" ng-repeat="wrestler in female | orderBy: 'name'">
+        <img ng-if="wrestler.pic" class="epic" src="{{wrestler.pic}}" />
+        <i ng-if="!wrestler.pic" class="icon ion-person-stalker"></i>
+        <p class="padding-top"><strong>{{wrestler.name}}</strong> </p>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
