@@ -94,7 +94,7 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
   };
 
   // gets all of the wresters in the firebase to populate the add match dropdowns
-  Wrestlers.getAllSingle().then(function(wrestlers){
+  Wrestlers.getAllMale().then(function(wrestlers){
       $scope.wrestlers = wrestlers;
   })
   Wrestlers.getAllTag().then(function(wrestlers){
