@@ -60,7 +60,7 @@ angular.module('starter').controller("AuthCtrl", function($scope, $state, Auth, 
     if(Auth.isAuthorised()) {
       return firebase.auth().currentUser.uid;
     }
-  }
+  };
 
   // Listens for auth state changes
   firebase.auth().onAuthStateChanged(function(user) {
