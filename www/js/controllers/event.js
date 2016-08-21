@@ -5,27 +5,27 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
 
   // gets the specified event if from firebase
   Events.get(eventId).then(function(eventObj){
-    $scope.show()
-      $scope.event = eventObj;
-      // gets all the matches for that event
-          Matches.getByEvent($scope.event.$id).then(function(matches){
-              $scope.matches = matches;
-          });
-        $scope.hide();
+    $scope.show();
+    $scope.event = eventObj;
+    // gets all the matches for that event
+    Matches.getByEvent($scope.event.$id).then(function(matches){
+      $scope.matches = matches;
+    });
+    $scope.hide();
   });
 
   // Displays the current event score in a modal
   $scope.showScore = function(eventObj){
     Points.getByEvent(eventObj.$id).then(function(points){
-        $scope.showPoints = points;
-        var myPopup = $ionicPopup.show({
-          templateUrl: 'templates/modals/showScore.html',
-          title: 'Scores',
-          scope: $scope,
-          buttons: [
-            { text: 'Close' }
-          ]
-        });
+      $scope.showPoints = points;
+      var myPopup = $ionicPopup.show({
+        templateUrl: 'templates/modals/showScore.html',
+        title: 'Scores',
+        scope: $scope,
+        buttons: [
+          { text: 'Close' }
+        ]
+      });
     });
   };
 
@@ -41,15 +41,15 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
   // Completes the event, calculates winner, sets active to false
   $scope.eventComplete = function(eventObj){
     Points.getByEvent(eventObj.$id).then(function(points){
-        if(points.length>0) {
-          points.sort(comparePoints);
-          var winner = points[points.length - 1].name;
-        }
-        else{return;}
-        if(winner) {
-          firebase.database().ref('events').child(eventObj.$id).child("winner").set(winner);
-          firebase.database().ref('events').child(eventObj.$id).child("active").set(false);
-        }
+      if(points.length>0) {
+        points.sort(comparePoints);
+        var winner = points[points.length - 1].name;
+      }
+      else{return;}
+      if(winner) {
+        firebase.database().ref('events').child(eventObj.$id).child("winner").set(winner);
+        firebase.database().ref('events').child(eventObj.$id).child("active").set(false);
+      }
     });
 
 
@@ -98,11 +98,11 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
 
   // gets all of the wresters in the firebase to populate the add match dropdowns
   Wrestlers.getAllMale().then(function(wrestlers){
-      $scope.wrestlers = wrestlers;
-  })
+    $scope.wrestlers = wrestlers;
+  });
   Wrestlers.getAllTag().then(function(wrestlers){
-      $scope.teams = wrestlers;
-  })
+    $scope.teams = wrestlers;
+  });
 
   // Adds a match to the event
   $scope.addMatch = function(){
@@ -178,4 +178,4 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
   $scope.isGroupShown = function(group) {
     return $scope.shownGroup === group;
   };
-})
+});

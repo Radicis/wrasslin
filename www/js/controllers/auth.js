@@ -1,24 +1,24 @@
 angular.module('starter').controller("AuthCtrl", function($scope, $state, Auth, $ionicPopup,$ionicLoading){
 
-    var loadingText = [
-        "Making Cena win",
-        "Cheering for Ziggler",
-        "Getting in trouble",
-        "Squaring circles",
-        "Cocking Fist",
-        "Eating Booty Os",
-        "Certifying Gs"
-    ];
+  var loadingText = [
+    "Making Cena win",
+    "Cheering for Ziggler",
+    "Getting in trouble",
+    "Squaring circles",
+    "Cocking Fist",
+    "Eating Booty Os",
+    "Certifying Gs"
+  ];
 
   // shows the loading overlay
   $scope.show = function() {
-        var index = Math.floor(Math.random() * (loadingText.length - 0)) + 0;
-        $ionicLoading.show({
-          duration: 30000,
-          noBackdrop: true,
-          template: '<p class="item-icon-left">'+loadingText[index]+'<ion-spinner icon="lines"/></p>'
-        }).then(function(){
-        });
+    var index = Math.floor(Math.random() * (loadingText.length - 0)) + 0;
+    $ionicLoading.show({
+      duration: 30000,
+      noBackdrop: true,
+      template: '<p class="item-icon-left">'+loadingText[index]+'<ion-spinner icon="lines"/></p>'
+    }).then(function(){
+    });
   };
 
   // hides the loading overlay
@@ -109,4 +109,4 @@ angular.module('starter').controller("AuthCtrl", function($scope, $state, Auth, 
   $scope.logout = function(){
     Auth.signOut();
   };
-})
+});

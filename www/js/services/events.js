@@ -8,7 +8,7 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
       var events = $firebaseArray(eventsRef);
       events.$loaded().then(function(snap){
           def.resolve(snap);
-      })
+      });
       return def.promise;
   };
 
@@ -17,7 +17,7 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
     var activeEvents = $firebaseArray(eventsRef.orderByChild("active").equalTo(true));
     activeEvents.$loaded().then(function(snap){
         def.resolve(snap);
-    })
+    });
     return def.promise;
   };
 
@@ -26,16 +26,16 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
       var active = $firebaseArray(eventsRef.orderByChild("active").equalTo(true).limitToFirst(1));
       active.$loaded().then(function(snap){
           def.resolve(snap);
-      })
+      });
       return def.promise;
   };
 
   this.getLastActive = function(){
       var def = $q.defer();
-      var lastActive = $firebaseArray(eventsRef.limitToFirst(1));
+      var lastActive = $firebaseArray(eventsRef.limitToLast(1));
       lastActive.$loaded().then(function(snap){
           def.resolve(snap[0]);
-      })
+      });
       return def.promise;
   };
 
@@ -44,7 +44,7 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
     var events = $firebaseArray(eventsRef);
     events.$loaded().then(function(snap){
         def.resolve(snap.$getRecord(eventId));
-    })
+    });
     return def.promise;
   };
 

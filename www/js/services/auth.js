@@ -24,8 +24,8 @@ angular.module('starter').service("Auth", function($q, $firebaseAuth, $cordovaOa
 
   this.isCreator = function(event){
     try{
-        var uid = firebase.auth().currentUser.uid;
-        return event.owner == uid;
+      var uid = firebase.auth().currentUser.uid;
+      return event.owner == uid;
     }catch(err){return false;}
   };
 
@@ -125,4 +125,4 @@ angular.module('starter').service("Auth", function($q, $firebaseAuth, $cordovaOa
       console.log("Signed error: " + error);
     });
   }
-})
+});

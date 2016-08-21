@@ -1,6 +1,6 @@
 angular.module('starter').service('Votes', function($q, $firebaseArray, $firebaseObject) {
 
-    var self = this;
+  var self = this;
 
   var votesRef = firebase.database().ref().child("votes/");
   var votes = $firebaseArray(votesRef);
@@ -28,13 +28,13 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
   };
 
   this.add = function(vote){
-      var newKey = firebase.database().ref('votes/').push(vote).key;
-      firebase.database().ref().child("matches").child(vote.matchId).child("votes/" + vote.uid).set(vote);
-  }
+    var newKey = firebase.database().ref('votes/').push(vote).key;
+    firebase.database().ref().child("matches").child(vote.matchId).child("votes/" + vote.uid).set(vote);
+  };
 
   this.hasUserVoted = function(votes, uid){
     if(votes){
-        return !(typeof votes[uid] === "undefined");
+      return !(typeof votes[uid] === "undefined");
     }
   };
 
@@ -43,22 +43,20 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
   };
 
   this.deleteByEvent = function(event){
-      var eventVotes = $firebaseArray(votesRef.orderByChild("eventId").equalTo(event.$id));
-      eventVotes.$loaded().then(function(votes){
-        votes.forEach(function(vote){
-            self.delete(vote);
-        })
-      });
+    var eventVotes = $firebaseArray(votesRef.orderByChild("eventId").equalTo(event.$id));
+    eventVotes.$loaded().then(function(votes){
+      votes.forEach(function(vote){
+        self.delete(vote);
+      })
+    });
   };
 
   this.deleteByMatch = function(match){
-      var matchVotes = $firebaseArray(votesRef.orderByChild("matchId").equalTo(match.$id));
-      matchVotes.$loaded().then(function(votes){
-        votes.forEach(function(vote){
-            self.delete(vote);
-        })
-      });
+    var matchVotes = $firebaseArray(votesRef.orderByChild("matchId").equalTo(match.$id));
+    matchVotes.$loaded().then(function(votes){
+      votes.forEach(function(vote){
+        self.delete(vote);
+      })
+    });
   }
-
-
 });

@@ -1,9 +1,13 @@
 <ion-view view-title="{{event.name}}">
-    <ion-nav-buttons side="right">
-      <button ng-if="isCreator(event) && event.active" class="button" ng-click="addMatch()">
-        Add Match
-      </button>
-    </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button ng-if="!isAuthorised()" class="button" ng-click="login()">
+      Log In
+    </button>
+    <button ng-if="isAuthorised()" class="button" ng-click="logout()">
+      Log Out
+    </button>
+  </ion-nav-buttons>
+  <ion-floating-button ng-if="isAuthorised()"  ng-click="addMatch()" has-footer="true" button-color="#33cd5f" icon="ion-plus">  </ion-floating-button>
   <ion-content delegate-handle="scrollArea">
       <ion-list ng-if="event">
         <ion-item class="item-dark">

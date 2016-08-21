@@ -16,19 +16,19 @@ angular.module('starter').service('Matches', function($q, Votes, $firebaseArray,
 
   this.get = function(matchId){
     return matches.$getRecord(matchId);
-};
+  };
 
-    this.createMatch = function (eventId, type, p1, p2) {
-      var dateTime = firebase.database.ServerValue.TIMESTAMP;
-      var newKey = matchesRef.push({
-        eventId: eventId,
-        type: type,
-        p1: p1,
-        p2: p2,
-        date: dateTime,
-        active: true
-      });
-    };
+  this.createMatch = function (eventId, type, p1, p2) {
+    var dateTime = firebase.database.ServerValue.TIMESTAMP;
+    var newKey = matchesRef.push({
+      eventId: eventId,
+      type: type,
+      p1: p1,
+      p2: p2,
+      date: dateTime,
+      active: true
+    });
+  };
 
   this.getVotes = function(match){
     var def = $q.defer();
@@ -51,18 +51,18 @@ angular.module('starter').service('Matches', function($q, Votes, $firebaseArray,
   };
 
   this.setWinner = function(match, name){
-      var matchRef = firebase.database().ref().child("matches").child(match.$id);
-      matchRef.update({winner: name, active: false});
-  }
+    var matchRef = firebase.database().ref().child("matches").child(match.$id);
+    matchRef.update({winner: name, active: false});
+  };
 
   this.getByEvent = function(eventId){
     var def = $q.defer();
     var eventMatches = $firebaseArray(matchesRef.orderByChild("eventId").equalTo(eventId));
     eventMatches.$loaded().then(function(snap){
       def.resolve(snap);
-    })
+    });
     return def.promise;
-  }
+  };
 
   this.delete = function(match){
     matchesRef.child(match.$id).remove();
@@ -70,12 +70,11 @@ angular.module('starter').service('Matches', function($q, Votes, $firebaseArray,
   };
 
   this.deleteByEvent = function(event){
-      var eventMatches = $firebaseArray(matchesRef.orderByChild("eventId").equalTo(event.$id));
-      eventMatches.$loaded().then(function(matches){
-        eventMatches.forEach(function(match){
-            self.delete(match);
-        })
-      });
+    var eventMatches = $firebaseArray(matchesRef.orderByChild("eventId").equalTo(event.$id));
+    eventMatches.$loaded().then(function(matches){
+      eventMatches.forEach(function(match){
+        self.delete(match);
+      })
+    });
   }
-
 });

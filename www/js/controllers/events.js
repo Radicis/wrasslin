@@ -3,17 +3,17 @@ angular.module('starter').controller('EventCtrl', function($scope, Auth, $ionicP
   // gets all of the events in firebase
   $scope.show();
   Events.getAll().then(function(events){
-      $scope.events = events;
-      $scope.hide();
-  })
+    $scope.events = events;
+    $scope.hide();
+  });
 
   $scope.doRefresh = function() {
-      $scope.show();
-      Events.getAll().then(function(events){
-          $scope.events = events;
-          $scope.$broadcast('scroll.refreshComplete');
-          $scope.hide();
-      });
+    $scope.show();
+    Events.getAll().then(function(events){
+      $scope.events = events;
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.hide();
+    });
   };
 
   // Creates a new event
@@ -34,11 +34,11 @@ angular.module('starter').controller('EventCtrl', function($scope, Auth, $ionicP
             } else {
               var uid = firebase.auth().currentUser.uid;
               var newEvent = {
-                  name: $scope.newEvent.name,
-                  location: $scope.newEvent.location,
-                  date: firebase.database.ServerValue.TIMESTAMP,
-                  active: true,
-                  owner: uid
+                name: $scope.newEvent.name,
+                location: $scope.newEvent.location,
+                date: firebase.database.ServerValue.TIMESTAMP,
+                active: true,
+                owner: uid
               };
               Events.createEvent(newEvent);
               myPopup.close();

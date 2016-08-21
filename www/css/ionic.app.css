@@ -9806,6 +9806,9 @@ html, .pane, .view {
 .center {
   text-align: center; }
 
+.item .badge {
+  margin-right: 40px; }
+
 .scroll-content {
   background-color: #222;
   padding: 0; }
@@ -9829,6 +9832,9 @@ h2 {
   font-size: 0.7em;
   opacity: 0.7;
   color: #aaa !important; }
+
+#floating-button .icon.menu-icon {
+  color: #222 !important; }
 
 .item-icon-left ion-spinner {
   float: left;

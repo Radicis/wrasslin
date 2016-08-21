@@ -15,18 +15,18 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
   };
 
   this.set = function(eventId, pointsRef, newPoints){
-     var eventsRef = ref.child("events").child(eventId).child("points");
-     eventsRef.child(pointsRef).set(newPoints);
+    var eventsRef = ref.child("events").child(eventId).child("points");
+    eventsRef.child(pointsRef).set(newPoints);
   };
 
   this.getByEvent = function(eventId){
-      var def = $q.defer();
-      var eventPointsRef = ref.child("events").child(eventId).child("points");
-      var eventPoints = $firebaseArray(eventPointsRef);
-      eventPoints.$loaded().then(function(points){
-          def.resolve(points);
-        });
-        return def.promise;
+    var def = $q.defer();
+    var eventPointsRef = ref.child("events").child(eventId).child("points");
+    var eventPoints = $firebaseArray(eventPointsRef);
+    eventPoints.$loaded().then(function(points){
+      def.resolve(points);
+    });
+    return def.promise;
   };
 
   this.getByReference = function(eventId, uniqueRef){

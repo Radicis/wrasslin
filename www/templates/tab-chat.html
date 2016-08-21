@@ -1,4 +1,12 @@
 <ion-view view-title="Chat">
+  <ion-nav-buttons side="right">
+    <button ng-if="!isAuthorised()" class="button" ng-click="login()">
+      Log In
+    </button>
+    <button ng-if="isAuthorised()" class="button" ng-click="logout()">
+      Log Out
+    </button>
+  </ion-nav-buttons>
 <ion-content>
   <div class="center">
     <img class="headerimg" src="./img/banner.jpg" />

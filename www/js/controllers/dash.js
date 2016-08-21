@@ -24,7 +24,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
       $scope.$broadcast('scroll.refreshComplete');
       $scope.hide();
     });
-  }
+  };
 
   Events.getRecentActive().then(function(events){
     $scope.notify = 0;
@@ -34,7 +34,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
   $scope.clearNotifications = function(){
     $scope.notify = 0;
     $state.go("tab.dash");
-  }
+  };
 
   var ref = firebase.database().ref();
   var matchRef = ref.child("matches");
@@ -51,7 +51,7 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
   // Directs the user to events page
   $scope.goToEvents = function(){
     $state.go("tab.events");
-  }
+  };
 
   // Displays the current event score in a modal
   $scope.showScore = function(eventObj){
