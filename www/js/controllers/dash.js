@@ -170,5 +170,4 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
   $scope.isGroupShown = function(group) {
     return $scope.shownGroup === group;
   };
-
 });

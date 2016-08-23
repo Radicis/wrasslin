@@ -1,4 +1,4 @@
-angular.module('starter').service('Matches', function($q, Votes, $firebaseArray, $firebaseObject) {
+angular.module('starter').service('Matches', function($q, Votes, $firebaseArray) {
 
   var ref = firebase.database().ref();
   var matchesRef = firebase.database().ref().child("matches/");
@@ -76,5 +76,5 @@ angular.module('starter').service('Matches', function($q, Votes, $firebaseArray,
         self.delete(match);
       })
     });
-  }
+  };
 });

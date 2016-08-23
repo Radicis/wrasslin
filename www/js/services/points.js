@@ -31,7 +31,6 @@ angular.module('starter').service('Points', function($q, Events, Matches, Votes,
 
   this.getByReference = function(eventId, uniqueRef){
     var pointsRef = ref.child("events").child(eventId).child("points");
-    var uPoints = $firebaseObject(pointsRef.child(uniqueRef));
-    return uPoints;
+    return $firebaseObject(pointsRef.child(uniqueRef));
   }
 });

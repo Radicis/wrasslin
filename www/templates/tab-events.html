@@ -3,9 +3,14 @@
     <button ng-if="!isAuthorised()" class="button" ng-click="login()">
       Log In
     </button>
-    <button ng-if="isAuthorised()" class="button" ng-click="logout()">
-      Log Out
-    </button>
+    <div ng-if="isAuthorised()" ng-init="getUsername()">
+      <button class="username button button-clear button-balanced">
+        {{username}}
+      </button>
+      <button class="button" ng-click="logout()">
+        Log Out
+      </button>
+    </div>
   </ion-nav-buttons>
   <ion-floating-button ng-if="isAuthorised()"  ng-click="addEvent()" has-footer="true" button-color="#33cd5f" icon="ion-plus">  </ion-floating-button>
   <ion-content delegate-handle="scrollArea">

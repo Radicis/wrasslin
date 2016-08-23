@@ -1,4 +1,4 @@
-angular.module('starter').service('Votes', function($q, $firebaseArray, $firebaseObject) {
+angular.module('starter').service('Votes', function($q, $firebaseArray) {
 
   var self = this;
 
@@ -58,5 +58,5 @@ angular.module('starter').service('Votes', function($q, $firebaseArray, $firebas
         self.delete(vote);
       })
     });
-  }
+  };
 });

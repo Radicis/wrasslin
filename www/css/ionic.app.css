@@ -9828,6 +9828,9 @@ h2 {
 .dull {
   color: #aaa !important; }
 
+.username {
+  font-size: 1em !important; }
+
 .smaller {
   font-size: 0.7em;
   opacity: 0.7;

@@ -58,6 +58,10 @@ h2{
     color: $dull !important;
 }
 
+.username{
+  font-size:1em !important;
+}
+
 .smaller{
     font-size:0.7em;
     opacity:0.7;
@@ -74,7 +78,6 @@ h2{
   margin-left: -3.2em;
   margin-right: 1em;
  }
-
 
 .spinner svg {
   width: 30px;
@@ -115,6 +118,7 @@ h2{
   -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 250ms;
   transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 250ms;
 }
+
 .fade-in.ng-enter-active,
 .fade-in > .ng-enter-active {
   -webkit-transform: scale(1.0);

@@ -62,6 +62,15 @@ angular.module('starter').controller("AuthCtrl", function($scope, $state, Auth, 
     }
   };
 
+  // Returns the logged in user's uid
+  $scope.getUsername = function(){
+    if(Auth.isAuthorised()) {
+      Auth.get(firebase.auth().currentUser.uid).then(function(userInfo){
+        $scope.username = userInfo[0].name;
+      });
+    }
+  };
+
   // Listens for auth state changes
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {

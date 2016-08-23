@@ -109,7 +109,7 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
 
     $scope.newMatch = {};
     $scope.matchTypes = ['Single', 'Tag-Team'];
-    $scope.selectedMatchtype;
+    $scope.selectedMatchtype = $scope.matchTypes[0];
 
     var myPopup = $ionicPopup.show({
       templateUrl: 'templates/modals/addMatch.html',

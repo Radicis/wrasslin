@@ -3,9 +3,14 @@
     <button ng-if="!isAuthorised()" class="button" ng-click="login()">
       Log In
     </button>
-    <button ng-if="isAuthorised()" class="button" ng-click="logout()">
+    <div ng-if="isAuthorised()" ng-init="getUsername()">
+      <button class="username button button-clear button-balanced">
+        {{username}}
+      </button>
+      <button class="button" ng-click="logout()">
       Log Out
     </button>
+      </div>
   </ion-nav-buttons>
   <ion-content delegate-handle="scrollArea">
     <ion-refresher pulling-text="Pull to refresh" on-refresh="populateEventInfo()"></ion-refresher>
@@ -56,7 +61,7 @@
         <button class="pull-right button scoresButton" ng-click="showScore(lastActiveEvent)">Score</button>
         <h2 class="header">{{lastActiveEvent.name}}</h2>
         <p class="dull">{{lastActiveEvent.location}} : {{lastActiveEvent.date | date:'medium'}}</p>
-        <p ng-if="lastActiveEvent.winner">Champion: {{lastActiveEvent.winner}}</p>
+        <p ng-if="lastActiveEvent.winner">Champion: <span class="isWinner">{{lastActiveEvent.winner}}</span></p>
         <hr>
         <ion-item class="center item-dark"
                   ng-click="toggleGroup(match)"

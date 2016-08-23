@@ -1,4 +1,4 @@
-angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $firebaseArray, $firebaseObject) {
+angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $firebaseArray) {
 
   var ref = firebase.database().ref();
   var eventsRef = firebase.database().ref().child("events/");
@@ -66,7 +66,6 @@ angular.module('starter').service('Events', function($q, Matches, Votes, Auth, $
     Matches.deleteByEvent(event);
     Votes.deleteByEvent(event);
   };
-
 
   this.getPoints = function(event){
     userPoints = [];

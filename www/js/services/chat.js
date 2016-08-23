@@ -15,5 +15,5 @@ angular.module('starter').service('Chat', function($q, $firebaseArray, $firebase
 
   this.chat = function(message){
     chatRef.push(message);
-  }
+  };
 });
