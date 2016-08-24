@@ -6,7 +6,7 @@ angular.module('starter').service('Chat', function($q, $firebaseArray, $firebase
   // get the last 50 messages
   this.getRecent = function(){
     var def = $q.defer();
-    var chats = $firebaseArray(chatRef.limitToFirst(20));
+    var chats = $firebaseArray(chatRef.limitToLast(30));
     chats.$loaded().then(function(snap){
       def.resolve(snap);
     });
