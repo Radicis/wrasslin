@@ -32,6 +32,26 @@
   </label>
 </div>
 
+<div class="list" ng-show="selectedMatchtype == matchTypes[2]">
+  <label class="item item-input item-select">
+    <div class="input-label">
+      &nbsp;
+    </div>
+    <select ng-options="item as item.name for item in women"
+            ng-model="newMatch.p1">
+    </select>
+  </label>
+  <p class="center padding">Vs</p>
+  <label class="item item-input item-select">
+    <div class="input-label">
+      &nbsp;
+    </div>
+    <select ng-options="item as item.name for item in women"
+            ng-model="newMatch.p2">
+    </select>
+  </label>
+</div>
+
 <div class="list" ng-show="selectedMatchtype == matchTypes[1]">
   <label class="item item-input item-select">
     <div class="input-label">

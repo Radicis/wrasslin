@@ -103,12 +103,16 @@ angular.module('starter').controller('EventDetailCtrl', function($scope,Wrestler
   Wrestlers.getAllTag().then(function(wrestlers){
     $scope.teams = wrestlers;
   });
+  Wrestlers.getAllFemales().then(function(wrestlers){
+    $scope.women = wrestlers;
+  });
+
 
   // Adds a match to the event
   $scope.addMatch = function(){
 
     $scope.newMatch = {};
-    $scope.matchTypes = ['Single', 'Tag-Team'];
+    $scope.matchTypes = ['Single', 'Tag-Team', "Divas"];
     $scope.selectedMatchtype = $scope.matchTypes[0];
 
     var myPopup = $ionicPopup.show({

@@ -141,12 +141,11 @@ angular.module('starter').controller('DashCtrl', function($scope, $window, $ioni
         if(vote.vote==winner){
           Points.getByReference(eventObjId, vote.uid).$loaded().then(function(uPoints){
             if(uPoints.points>0){
-              points = uPoints.points + 1;
+              console.log("Found existing points, adding " + points + " to " + uPoints.points);
+              points += uPoints.points;
             }
             var newPoints = {
               uid: vote.uid,
-              eventId: eventObjId,
-              matchId: match.$id,
               points: points,
               name: vote.name,
               img: vote.img
