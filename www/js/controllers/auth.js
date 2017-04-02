@@ -4,10 +4,10 @@ angular.module('starter').controller("AuthCtrl", function($scope, Auth, $ionicPo
 
   // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyCkeZQPg-wYtS08LQDqFKyDN4_aCvu6nkY",
-    authDomain: "project-2974987705063058636.firebaseapp.com",
-    databaseURL: "https://project-2974987705063058636.firebaseio.com",
-    storageBucket: "project--2974987705063058636.appspot.com",
+    apiKey: "xxxxxxx",
+    authDomain: "xxxxxx",
+    databaseURL: "xxxxx",
+    storageBucket: "xxxxx",
   };
   firebase.initializeApp(config);
 
