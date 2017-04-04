@@ -26,7 +26,7 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
         }
       ]
     });
-  }
+  };
 
   $scope.addWrestler = function(){
     $scope.newWrestler = {};
@@ -71,5 +71,4 @@ angular.module('starter').controller('WrestlersCtrl', function($scope, Wrestlers
       });
     });
   };
-
 });
